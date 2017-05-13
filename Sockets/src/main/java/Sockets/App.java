@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Hello world!
@@ -16,31 +18,16 @@ public class App
     public static void main( String[] args )
     {
         try {
+            ExecutorService service = Executors.newFixedThreadPool(2);
             int port = 5555;
             ServerSocket ss = new ServerSocket(port); // создаем сокет сервера и привязываем его к вышеуказанному порту
             System.out.println("Waiting for a client...");
-
-            Socket socket = ss.accept(); // заставляем сервер ждать подключений и выводим сообщение когда кто-то связался с сервером
-            System.out.println("Got a client :) ... Finally, someone saw me through all the cover!");
-            System.out.println();
-
-            // Берем входной и выходной потоки сокета, теперь можем получать и отсылать данные клиенту.
-            InputStream sin = socket.getInputStream();
-            OutputStream sout = socket.getOutputStream();
-
-            // Конвертируем потоки в другой тип, чтоб легче обрабатывать текстовые сообщения.
-            DataInputStream in = new DataInputStream(sin);
-            DataOutputStream out = new DataOutputStream(sout);
-
-            String line = null;
+            Integer count = 0;
             while(true) {
-                line = in.readUTF(); // ожидаем пока клиент пришлет строку текста.
-                System.out.println("The dumb client just sent me this line : " + line);
-                System.out.println("I'm sending it back...");
-//                out.writeUTF(line); // отсылаем клиенту обратно ту самую строку текста.
-//                out.flush(); // заставляем поток закончить передачу данных.
-//                System.out.println("Waiting for the next line...");
-//                System.out.println();
+                Socket socket = ss.accept();
+                service.submit(new Responder(socket,count));
+                System.out.println("Created new tread");
+                count++;
             }
         } catch(Exception x) { x.printStackTrace(); }
     }
