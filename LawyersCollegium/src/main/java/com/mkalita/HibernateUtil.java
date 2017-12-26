@@ -4,8 +4,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.Closeable;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class HibernateUtil implements Closeable{
 
@@ -14,10 +16,10 @@ public class HibernateUtil implements Closeable{
     private final EntityManagerFactory emf;
     private List<EntityManager> ems = new ArrayList<>();
 
-    public HibernateUtil(String path) {
+    HibernateUtil(String path) {
         try {
-            Map addedOrOverridenProperties = Collections.singletonMap("hibernate.connection.url" , String.format("jdbc:ucanaccess://%s", path));
-            emf = Persistence.createEntityManagerFactory(PERSISTENT_UNIT_NAME, addedOrOverridenProperties);
+            Map addedOrOverriddenProperties = Collections.singletonMap("hibernate.connection.url", String.format("jdbc:ucanaccess://%s", path));
+            emf = Persistence.createEntityManagerFactory(PERSISTENT_UNIT_NAME, addedOrOverriddenProperties);
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
         }
@@ -29,16 +31,8 @@ public class HibernateUtil implements Closeable{
         return em;
     }
 
-    private Properties getProps(String path){
-        Properties props = new Properties();
-        props.setProperty("hibernate.connection.driver_class", "net.ucanaccess.jdbc.UcanaccessDriver");
-        props.setProperty("hibernate.connection.url", String.format("jdbc:ucanaccess://%s", path));
-        props.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
-        return props;
-    }
-
     @Override
-    public void close() throws IOException {
+    public void close() {
         for (EntityManager em : ems) {
             em.close();
         }

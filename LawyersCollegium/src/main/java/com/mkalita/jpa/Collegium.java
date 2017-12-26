@@ -2,6 +2,7 @@ package com.mkalita.jpa;
 
 import javax.persistence.*;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "Коллегии")
 public class Collegium {
@@ -42,11 +43,6 @@ public class Collegium {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Collegium{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", other='").append(other).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return String.format("Collegium{id=%d, name='%s', other='%s'}", id, name, other);
     }
 }

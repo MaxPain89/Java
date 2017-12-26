@@ -5,11 +5,12 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "Адвокаты")
 public class Lawyer {
     private long id;
-    String fullName;
+    private String fullName;
     private Collegium collegium;
     private boolean out;
 
@@ -57,12 +58,6 @@ public class Lawyer {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Lawyer{");
-        sb.append("id=").append(id);
-        sb.append(", fullName='").append(fullName).append('\'');
-        sb.append(", collegium=").append(collegium);
-        sb.append(", out=").append(out);
-        sb.append('}');
-        return sb.toString();
+        return String.format("Lawyer{id=%d, fullName='%s', collegium=%s, out=%s}", id, fullName, collegium, out);
     }
 }

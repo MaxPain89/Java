@@ -8,6 +8,7 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import java.util.Date;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "Постановления")
 public class Decree {
@@ -83,14 +84,6 @@ public class Decree {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Decree{");
-        sb.append("decreeId=").append(decreeId);
-        sb.append(", DateTime=").append(DateTime);
-        sb.append(", lawyer=").append(lawyer);
-        sb.append(", accused='").append(accused).append('\'');
-        sb.append(", amount=").append(amount);
-        sb.append(", date=").append(date);
-        sb.append('}');
-        return sb.toString();
+        return String.format("Decree{decreeId=%d, DateTime=%s, lawyer=%s, accused='%s', amount=%s, date=%s}", decreeId, DateTime, lawyer, accused, amount, date);
     }
 }
