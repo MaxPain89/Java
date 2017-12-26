@@ -44,6 +44,8 @@ buildNumber.properties
 
 Logging/.idea/**/workspace.xml
 
+LawyersCollegium/base/**
+
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids
