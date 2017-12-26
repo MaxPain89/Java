@@ -42,6 +42,8 @@ buildNumber.properties
 .idea/**/tasks.xml
 .idea/dictionaries
 
+Logging/.idea/**/workspace.xml
+
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids
