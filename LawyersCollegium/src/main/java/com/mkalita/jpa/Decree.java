@@ -1,47 +1,59 @@
 package com.mkalita.jpa;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.mkalita.wire.WireDecree;
+import javax.persistence.criteria.Fetch;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import javax.persistence.criteria.FetchParent;
+import javax.persistence.criteria.JoinType;
 import java.util.Date;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "Постановления")
-public class Decree {
-    private long decreeId;
-    private Date DateTime;
+public class Decree extends ConfigurableFetchMode {
+    private long id;
+    private Date date;
     private Lawyer lawyer;
     private String accused;
     private float amount;
-    private Date date;
+    private Date payDate;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "`Код постановления`", nullable = false, updatable = false)
-    public long getDecreeId() {
-        return decreeId;
+    public Decree() {
     }
 
-    public void setDecreeId(long decreeId) {
-        this.decreeId = decreeId;
+    public Decree(WireDecree wireDecree) {
+        this.date = wireDecree.getDate();
+        this.lawyer = null;
+        this.accused = wireDecree.getAccused();
+        this.amount = wireDecree.getAmount();
+        this.payDate = wireDecree.getPayDate();
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "`Код постановления`", nullable = false, updatable = false)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long decreeId) {
+        this.id = decreeId;
     }
 
     @Basic
     @Column(name = "`Дата постановления`")
-    public Date getDateTime() {
-        return DateTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateTime(Date dateTime) {
-        DateTime = dateTime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.JOIN)
+    @ManyToOne
     @JoinColumn(name = "Адвокат", referencedColumnName = "`Код адвоката`")
     @NotFound( action = NotFoundAction.IGNORE )
     public Lawyer getLawyer() {
@@ -74,16 +86,28 @@ public class Decree {
 
     @Basic
     @Column(name = "`Дата выплаты`")
-    public Date getDate() {
-        return date;
+    public Date getPayDate() {
+        return payDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPayDate(Date date) {
+        this.payDate = date;
     }
 
     @Override
     public String toString() {
-        return String.format("Decree{decreeId=%d, DateTime=%s, lawyer=%s, accused='%s', amount=%s, date=%s}", decreeId, DateTime, lawyer, accused, amount, date);
+        return String.format("Decree{decreeId=%d, date=%s, lawyer=%s, accused='%s', amount=%s, date=%s}", id, date, lawyer, accused, amount, payDate);
+    }
+
+    public WireDecree toWire(){
+        return new WireDecree(this.date, this.accused, this.amount, this.payDate);
+    }
+
+    @SuppressWarnings("unused")
+    public static <K, V> void addFetchTypes(FetchParent<K,V> root) {
+        if (!checkBreakCondition(root, Lawyer.class)) {
+            Fetch<Decree, Lawyer> d_l_fetch = root.fetch("lawyer", JoinType.LEFT);
+            Lawyer.addFetchTypes(d_l_fetch);
+        }
     }
 }

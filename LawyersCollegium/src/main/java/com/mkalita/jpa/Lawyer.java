@@ -1,21 +1,32 @@
 package com.mkalita.jpa;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.mkalita.wire.WireLawyer;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import javax.persistence.criteria.FetchParent;
+import javax.persistence.criteria.JoinType;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "Адвокаты")
-public class Lawyer {
+public class Lawyer extends ConfigurableFetchMode{
     private long id;
     private String fullName;
     private Collegium collegium;
     private boolean out;
 
+    public Lawyer(WireLawyer wirelawyer) {
+        this.fullName = wirelawyer.getFullName();
+        this.out = wirelawyer.isOut();
+    }
+
+    public Lawyer() {
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "`Код адвоката`", nullable = false, updatable = false)
     public long getId() {
         return id;
@@ -35,9 +46,9 @@ public class Lawyer {
         this.fullName = fullName;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.JOIN)
+    @ManyToOne
     @JoinColumn(name = "`Код коллегии`", referencedColumnName = "`Код коллегии`")
+    @NotFound(action = NotFoundAction.IGNORE)
     public Collegium getCollegium() {
         return collegium;
     }
@@ -59,5 +70,15 @@ public class Lawyer {
     @Override
     public String toString() {
         return String.format("Lawyer{id=%d, fullName='%s', collegium=%s, out=%s}", id, fullName, collegium, out);
+    }
+
+    public WireLawyer toWire(){
+        return new WireLawyer(this.fullName,
+                              this.isOut());
+    }
+
+    @SuppressWarnings("unused")
+    public static <K, V> void addFetchTypes(FetchParent<K,V> root) {
+        root.fetch("collegium", JoinType.LEFT);
     }
 }

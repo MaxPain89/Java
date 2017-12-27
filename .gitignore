@@ -43,6 +43,8 @@ buildNumber.properties
 .idea/dictionaries
 
 Logging/.idea/**/workspace.xml
+Logging/target/*
+LawyersCollegium/target/*
 
 LawyersCollegium/base/**
 

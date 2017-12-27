@@ -1,4 +1,4 @@
-package com.mkalita;
+package com.mkalita.utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +16,7 @@ public class HibernateUtil implements Closeable{
     private final EntityManagerFactory emf;
     private List<EntityManager> ems = new ArrayList<>();
 
-    HibernateUtil(String path) {
+    public HibernateUtil(String path) {
         try {
             Map addedOrOverriddenProperties = Collections.singletonMap("hibernate.connection.url", String.format("jdbc:ucanaccess://%s", path));
             emf = Persistence.createEntityManagerFactory(PERSISTENT_UNIT_NAME, addedOrOverriddenProperties);

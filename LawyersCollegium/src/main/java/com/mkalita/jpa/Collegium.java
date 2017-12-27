@@ -1,5 +1,7 @@
 package com.mkalita.jpa;
 
+import com.mkalita.wire.WireCollegium;
+
 import javax.persistence.*;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -10,8 +12,16 @@ public class Collegium {
     private String name;
     private String other;
 
+    public Collegium() {
+    }
+
+    public Collegium(WireCollegium wireCollegium) {
+        this.name = wireCollegium.getName();
+        this.other = wireCollegium.getOther();
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "`Код коллегии`", nullable = false, updatable = false)
     public long getId() {
         return id;
@@ -44,5 +54,9 @@ public class Collegium {
     @Override
     public String toString() {
         return String.format("Collegium{id=%d, name='%s', other='%s'}", id, name, other);
+    }
+
+    public WireCollegium toWire(){
+        return new WireCollegium(this.name, this.other);
     }
 }
