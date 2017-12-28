@@ -5,6 +5,7 @@ import com.mkalita.jpa.Collegium;
 import com.mkalita.jpa.Decree;
 import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.HibernateUtil;
+import net.ucanaccess.jdbc.UcanaccessDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +29,10 @@ public class App {
             pathToDb = args[0];
         }
         try {
-            Class.forName("org.hibernate.dialect.SQLServerDialect");
+            Class.forName(UcanaccessDriver.class.getName());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(String.format("Couldn't find %s in classpath.", UcanaccessDriver.class.getName()));
+            System.exit(1);
         }
         File f = new File(pathToDb);
         if(!f.exists() || f.isDirectory()) {
@@ -38,7 +40,7 @@ public class App {
         }
         try (HibernateUtil hibernateUtil = new HibernateUtil(pathToDb)) {
             MdbController mdbController = new MdbController(hibernateUtil);
-
+            mdbController.fixInconsistency();
             List<Decree> decrees = mdbController.getAllDecrees();
             for (Decree decree : decrees) {
                 Lawyer lawyer = decree.getLawyer();

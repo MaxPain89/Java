@@ -5,6 +5,78 @@
   <groupId>com.mkalita</groupId>
   <artifactId>mdb_access</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>mdb_access</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.targetJdk>1.8</project.build.targetJdk>
+    <build.jvmsize>1024m</build.jvmsize>
+
+    <plugin.mvn.dependancy>2.10</plugin.mvn.dependancy>
+    <plugin.mvn.assmbl>2.4</plugin.mvn.assmbl>
+
+    <dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
+    <dep.hibernate.core.version>5.2.10.Final</dep.hibernate.core.version>
+    <dep.ucanaccess.version>4.0.3</dep.ucanaccess.version>
+    <dep.jackson.version>2.8.4</dep.jackson.version>
+    <dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
+    <dep.junit.version>3.8.1</dep.junit.version>
+    <dep.jackson-core.version>2.9.3</dep.jackson-core.version>
+    <dep.slf4j.version>1.7.25</dep.slf4j.version>
+  </properties>
+
+  <dependencies>
+    <!--ucanaccess driver-->
+    <dependency>
+      <groupId>net.sf.ucanaccess</groupId>
+      <artifactId>ucanaccess</artifactId>
+      <version>${dep.ucanaccess.version}</version>
+    </dependency>
+
+    <!--hibernate-->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${dep.hibernate.core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>${dep.hibernate.jpa.version}</version>
+    </dependency>
+
+    <!--json-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${dep.jackson-core.version}</version>
+    </dependency>
+
+    <!--Logging-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${dep.slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${dep.slf4j.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--tests-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${dep.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -15,132 +87,60 @@
           <source>${project.build.targetJdk}</source>
           <target>${project.build.targetJdk}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
-          <maxmem>${rvr.build.jvmsize}</maxmem>
+          <maxmem>${build.jvmsize}</maxmem>
           <showWarnings>true</showWarnings>
           <compilerArguments>
-            <Werror />
+            <Werror/>
           </compilerArguments>
         </configuration>
       </plugin>
-        <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>${dep.plugin.mvn.assmbl}</version>
-          <configuration>
-            <descriptorRefs>
-              <descriptorRef>jar-with-dependencies</descriptorRef>
-            </descriptorRefs>
-            <finalName>${project.artifactId}</finalName>
-            <appendAssemblyId>false</appendAssemblyId>
-            <archive>
-              <manifest>
-                <mainClass>com.mkalita.App</mainClass>
-              </manifest>
-            </archive>
-          </configuration>
-          <executions>
-            <execution>
-              <id>make-assembly</id> <!-- this is used for inheritance merges -->
-              <phase>package</phase> <!-- bind to the packaging phase -->
-              <goals>
-                <goal>single</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${plugin.mvn.assmbl}</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>${project.artifactId}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <archive>
+            <manifest>
+              <mainClass>com.mkalita.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase> <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${plugin.mvn.dependancy}</version>
+        <configuration>
+          <skip>false</skip>
+          <failOnWarning>true</failOnWarning>
+          <ignoreNonCompile>true</ignoreNonCompile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>analyze-only</goal>
+              <goal>analyze-duplicate</goal>
+              <goal>analyze-dep-mgt</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
-  <packaging>jar</packaging>
-
-  <name>mdb_access</name>
-  <url>http://maven.apache.org</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.targetJdk>1.8</project.build.targetJdk>
-    <rvr.build.jvmsize>1024m</rvr.build.jvmsize>
-    <dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
-    <dep.hibernate.core.version>5.2.10.Final</dep.hibernate.core.version>
-    <dep.plugin.mvn.assmbl>2.4</dep.plugin.mvn.assmbl>
-    <dep.ucanaccess.version>4.0.3</dep.ucanaccess.version>
-    <dep.jackson.version>2.8.4</dep.jackson.version>
-    <dep.hsqldb.version>2.4.0</dep.hsqldb.version>
-    <dep.slf4j-log4j12.version>1.6.1</dep.slf4j-log4j12.version>
-    <dep.hibernate-jpa-2.0-api.version>1.0.1.Final</dep.hibernate-jpa-2.0-api.version>
-    <dep.log4j.version>1.2.17</dep.log4j.version>
-    <dep.junit.version>3.8.1</dep.junit.version>
-    <dep.jackson-core.version>2.9.3</dep.jackson-core.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${dep.junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ucanaccess</groupId>
-      <artifactId>ucanaccess</artifactId>
-      <version>${dep.ucanaccess.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hsqldb</groupId>
-          <artifactId>hsqldb</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>${dep.hsqldb.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${dep.slf4j-log4j12.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>${dep.log4j.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${dep.hibernate.core.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${dep.hibernate.core.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.0-api</artifactId>
-      <version>${dep.hibernate-jpa-2.0-api.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${dep.jackson-core.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>${dep.jackson-core.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${dep.jackson-core.version}</version>
-    </dependency>
-
-
-  </dependencies>
-
 
 </project>
