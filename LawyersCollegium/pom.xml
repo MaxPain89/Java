@@ -16,6 +16,7 @@
 
     <plugin.mvn.dependancy>2.10</plugin.mvn.dependancy>
     <plugin.mvn.assmbl>2.4</plugin.mvn.assmbl>
+    <plugin.findbugs.version>3.0.2</plugin.findbugs.version>
 
     <dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
     <dep.hibernate.core.version>5.2.10.Final</dep.hibernate.core.version>
@@ -26,6 +27,7 @@
     <dep.jackson-core.version>2.9.3</dep.jackson-core.version>
     <dep.slf4j.version>1.7.25</dep.slf4j.version>
     <dep.logback.version>1.1.6</dep.logback.version>
+    <dep.findbugs.version>3.0.1</dep.findbugs.version>
   </properties>
 
   <dependencies>
@@ -138,6 +140,32 @@
               <goal>analyze-only</goal>
               <goal>analyze-duplicate</goal>
               <goal>analyze-dep-mgt</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>${plugin.findbugs.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>findbugs</artifactId>
+            <version>${dep.findbugs.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration combine.children="append">
+          <skip>false</skip>
+          <jvmArgs>-Xmx${build.jvmsize}</jvmArgs>
+          <failOnError>true</failOnError>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>

@@ -57,7 +57,6 @@ public class MdbController {
         em.getTransaction().commit();
     }
 
-    @SuppressWarnings("SqlNoDataSourceInspection")
     public void fixInconsistency() {
         em.getTransaction().begin();
         int inconsistencyRecordsCount = _checkInconsistency();

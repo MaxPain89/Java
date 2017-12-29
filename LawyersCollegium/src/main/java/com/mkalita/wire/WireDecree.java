@@ -16,18 +16,18 @@ public class WireDecree {
                       @JsonProperty("accused") String accused,
                       @JsonProperty("amount") float amount,
                       @JsonProperty("payDate") Date payDate) {
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.accused = accused;
         this.amount = amount;
-        this.payDate = payDate;
+        this.payDate = new Date(payDate.getTime());
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public String getAccused() {
@@ -47,10 +47,10 @@ public class WireDecree {
     }
 
     public Date getPayDate() {
-        return payDate;
+        return new Date(payDate.getTime());
     }
 
     public void setPayDate(Date payDate) {
-        this.payDate = payDate;
+        this.payDate = new Date(payDate.getTime());
     }
 }

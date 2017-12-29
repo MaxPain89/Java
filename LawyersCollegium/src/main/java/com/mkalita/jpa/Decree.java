@@ -46,11 +46,11 @@ public class Decree extends ConfigurableFetchMode {
     @Basic
     @Column(name = "`Дата постановления`")
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     @ManyToOne
@@ -87,11 +87,11 @@ public class Decree extends ConfigurableFetchMode {
     @Basic
     @Column(name = "`Дата выплаты`")
     public Date getPayDate() {
-        return payDate;
+        return new Date(payDate.getTime());
     }
 
     public void setPayDate(Date date) {
-        this.payDate = date;
+        this.payDate = new Date(date.getTime());
     }
 
     @Override
