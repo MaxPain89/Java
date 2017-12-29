@@ -4,7 +4,7 @@ import com.mkalita.wire.WireCollegium;
 
 import javax.persistence.*;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
+@SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 @Entity
 @Table(name = "Коллегии")
 public class Collegium {

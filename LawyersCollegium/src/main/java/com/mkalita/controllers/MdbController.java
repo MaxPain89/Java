@@ -10,21 +10,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MdbController {
     private static final Logger log = LoggerFactory.getLogger(MdbController.class);
     private static final String selectInconsistencyEntitiesSql = "SELECT * FROM Постановления WHERE Адвокат NOT IN (SELECT `Код адвоката` FROM Адвокаты)";
     private static final String updateInconsistencyEntitiesSql = "UPDATE Постановления SET Адвокат=NULL WHERE Адвокат NOT IN (SELECT `Код адвоката` FROM Адвокаты)";
     private EntityManager em;
+    public static final String dateFormatStr = "dd/MM/yyyy";
 
     public MdbController(HibernateUtil hibernateUtil) {
         em = hibernateUtil.getEm();
     }
 
-    public List<Decree> getAllDecrees() {
+    private static boolean checkDateRange(Date actualDate, Date startDate, Date endDate) {
+        if (actualDate == null) {
+            return false;
+        }
+        boolean beforeCondition = startDate == null || actualDate.after(startDate);
+        boolean afterCondition = endDate == null || actualDate.before(endDate);
+        return beforeCondition && afterCondition;
+    }
+
+    private List<Decree> _getAllDecrees() {
         return JPAUtil.getObjects(em, Collections.emptyMap(), null, Decree.class);
+    }
+
+    @SuppressWarnings("unused")
+    public List<WireDecree> getAllDecrees() {
+        return _getAllDecrees().stream().map(Decree::toWire).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public List<WireDecree> getDecreesByDate(Date startDate, Date endDate) {
+        return _getAllDecrees().stream()
+                .filter((item) -> checkDateRange(item.getDate(), startDate, endDate))
+                .sorted(Comparator.comparing(Decree::getDate))
+                .map(Decree::toWire)
+                .collect(Collectors.toList());
+    }
+
+    public List<WireDecree> getDecreesForYear(int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startDate = calendar.getTime();
+        calendar.set(Calendar.YEAR, year + 1);
+        Date endDate = calendar.getTime();
+        return getDecreesByDate(startDate, endDate);
     }
 
     @SuppressWarnings("unused")

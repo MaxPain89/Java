@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.FetchParent;
 import javax.persistence.criteria.JoinType;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
+@SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 @Entity
 @Table(name = "Адвокаты")
 public class Lawyer extends ConfigurableFetchMode{

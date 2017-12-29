@@ -1,5 +1,5 @@
 package com.mkalita.jpa;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 public class Author {
 }

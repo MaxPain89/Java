@@ -1,16 +1,16 @@
 package com.mkalita.jpa;
 
 import com.mkalita.wire.WireDecree;
-import javax.persistence.criteria.Fetch;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.FetchParent;
 import javax.persistence.criteria.JoinType;
 import java.util.Date;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
+@SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 @Entity
 @Table(name = "Постановления")
 public class Decree extends ConfigurableFetchMode {
@@ -100,7 +100,13 @@ public class Decree extends ConfigurableFetchMode {
     }
 
     public WireDecree toWire(){
-        return new WireDecree(this.date, this.accused, this.amount, this.payDate);
+        Collegium collegium = this.lawyer != null ? this.lawyer.getCollegium() : null;
+        return new WireDecree(this.date,
+                this.accused,
+                this.lawyer != null ? lawyer.getFullName() : null,
+                collegium != null ? collegium.getName() : null,
+                this.amount,
+                this.payDate);
     }
 
     @SuppressWarnings("unused")

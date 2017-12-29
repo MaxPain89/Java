@@ -3,6 +3,7 @@ package com.mkalita.wire;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@SuppressWarnings("unused")
 public class WireLawyer {
     private String fullName;
     private boolean out;

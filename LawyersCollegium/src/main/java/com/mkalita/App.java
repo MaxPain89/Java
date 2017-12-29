@@ -1,10 +1,8 @@
 package com.mkalita;
 
 import com.mkalita.controllers.MdbController;
-import com.mkalita.jpa.Collegium;
-import com.mkalita.jpa.Decree;
-import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.HibernateUtil;
+import com.mkalita.wire.WireDecree;
 import net.ucanaccess.jdbc.UcanaccessDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,18 +39,9 @@ public class App {
         try (HibernateUtil hibernateUtil = new HibernateUtil(pathToDb)) {
             MdbController mdbController = new MdbController(hibernateUtil);
             mdbController.fixInconsistency();
-            List<Decree> decrees = mdbController.getAllDecrees();
-            for (Decree decree : decrees) {
-                Lawyer lawyer = decree.getLawyer();
-                Collegium collegium = null;
-                if (lawyer != null) {
-                    collegium = lawyer.getCollegium();
-                }
-
-                System.out.println(String.format("Lawyer: %s\t wireCollegium: %s\t accused: %s\t amount %s, number: %s",
-                        lawyer != null ? lawyer.getFullName() : null,
-                        collegium != null ? collegium.getName() : null,
-                        decree.getAccused(), String.valueOf(decree.getAmount()), String.valueOf(decree.getId())));
+            List<WireDecree> decrees = mdbController.getDecreesForYear(2007);
+            for (WireDecree decree : decrees) {
+                log.info(decree.toString());
             }
         }
     }

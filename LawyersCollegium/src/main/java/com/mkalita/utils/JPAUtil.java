@@ -69,6 +69,11 @@ public class JPAUtil {
                     if (((Collection) idValue).isEmpty()) {
                         return new ArrayList<>();
                     }
+                    if (objectPath != null) {
+                        predicates.add(objectPath.in((Collection) idValue));
+                    }
+                } else {
+                    predicates.add(cb.equal(objectPath, idValue));
                 }
             }
 
