@@ -8,11 +8,13 @@ import com.mkalita.wire.WireDecree;
 import com.mkalita.wire.WireLawyer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class MdbController {
     private static final Logger log = LoggerFactory.getLogger(MdbController.class);
     private static final String selectInconsistencyEntitiesSql = "SELECT * FROM Постановления WHERE Адвокат NOT IN (SELECT `Код адвоката` FROM Адвокаты)";
@@ -51,15 +53,19 @@ public class MdbController {
                 .collect(Collectors.toList());
     }
 
-    public List<WireDecree> getDecreesForYear(int year) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        Date startDate = calendar.getTime();
-        calendar.set(Calendar.YEAR, year + 1);
-        Date endDate = calendar.getTime();
-        return getDecreesByDate(startDate, endDate);
+    public List<WireDecree> getDecreesForYear(Integer year) {
+        if (year != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, Calendar.JANUARY);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            Date startDate = calendar.getTime();
+            calendar.set(Calendar.YEAR, year + 1);
+            Date endDate = calendar.getTime();
+            return getDecreesByDate(startDate, endDate);
+        } else {
+            return getDecreesByDate(null, null);
+        }
     }
 
     @SuppressWarnings("unused")
