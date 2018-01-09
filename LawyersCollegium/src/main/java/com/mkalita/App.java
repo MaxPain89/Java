@@ -1,5 +1,6 @@
 package com.mkalita;
 
+import com.mkalita.controllers.MdbController;
 import net.ucanaccess.jdbc.UcanaccessDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ public class App {
         if(!f.exists() || f.isDirectory()) {
             throw new RuntimeException(String.format("File %s does't exist", pathToDb));
         }
+        // Mdb base could contains inconsistency it should be fixed otherwise n+1 requests problem
+        MdbController.fixInconsistency();
 
         SpringApplication.run(App.class, args);
     }
