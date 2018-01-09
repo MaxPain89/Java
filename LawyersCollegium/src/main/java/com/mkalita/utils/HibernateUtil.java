@@ -1,5 +1,6 @@
 package com.mkalita.utils;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -29,6 +30,7 @@ public class HibernateUtil implements Closeable{
         }
     }
 
+    @Bean
     public EntityManager getEm() {
         EntityManager em = emf.createEntityManager();
         ems.add(em);

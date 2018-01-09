@@ -1,7 +1,6 @@
 package com.mkalita.controllers;
 
 import com.mkalita.jpa.Lawyer;
-import com.mkalita.utils.HibernateUtil;
 import com.mkalita.utils.JPAUtil;
 import com.mkalita.wire.WireLawyer;
 import org.slf4j.Logger;
@@ -15,8 +14,8 @@ public class LawyerController {
     private static final Logger log = LoggerFactory.getLogger(DecreeController.class);
     private EntityManager em;
 
-    public LawyerController(HibernateUtil hibernateUtil) {
-        em = hibernateUtil.getEm();
+    public LawyerController(EntityManager em) {
+        this.em = em;
     }
 
     public WireLawyer getLawyer(long lawyerId) {

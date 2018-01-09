@@ -11,11 +11,6 @@ public class MdbController {
     private static final Logger log = LoggerFactory.getLogger(MdbController.class);
     private static final String selectInconsistencyEntitiesSql = "SELECT * FROM Постановления WHERE Адвокат NOT IN (SELECT `Код адвоката` FROM Адвокаты)";
     private static final String updateInconsistencyEntitiesSql = "UPDATE Постановления SET Адвокат=NULL WHERE Адвокат NOT IN (SELECT `Код адвоката` FROM Адвокаты)";
-    private EntityManager em;
-
-    public MdbController(HibernateUtil hibernateUtil) {
-        em = hibernateUtil.getEm();
-    }
 
     public static void fixInconsistency() {
         try (HibernateUtil hibernateUtil = new HibernateUtil()) {
