@@ -9,6 +9,12 @@
   <name>mdb_access</name>
   <url>http://maven.apache.org</url>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.9.RELEASE</version>
+  </parent>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.targetJdk>1.8</project.build.targetJdk>
@@ -27,12 +33,27 @@
     <dep.junit.version>3.8.1</dep.junit.version>
     <dep.jackson-core.version>2.9.3</dep.jackson-core.version>
     <dep.slf4j.version>1.7.25</dep.slf4j.version>
-    <dep.logback.version>1.1.6</dep.logback.version>
+    <dep.logback.version>1.1.11</dep.logback.version>
     <dep.findbugs.version>3.0.1</dep.findbugs.version>
     <dep.pmd.version>5.2.1</dep.pmd.version>
+    <dep.jetty-server.version>9.4.8.v20171121</dep.jetty-server.version>
+    <dep.spring.version>4.3.13.RELEASE</dep.spring.version>
   </properties>
 
   <dependencies>
+
+    <!--spring-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${dep.spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${dep.spring.version}</version>
+    </dependency>
+
     <!--ucanaccess driver-->
     <dependency>
       <groupId>net.sf.ucanaccess</groupId>
@@ -56,7 +77,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${dep.jackson-core.version}</version>
     </dependency>
 
     <!--Logging-->
@@ -69,6 +89,21 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>${dep.logback.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--Spring-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
       <scope>runtime</scope>
     </dependency>
 
@@ -86,6 +121,21 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <classifier>spring-boot</classifier>
+              <mainClass>com.mkalita.App</mainClass>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
@@ -99,31 +149,6 @@
             <Werror/>
           </compilerArguments>
         </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>${plugin.mvn.assmbl}</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <finalName>${project.artifactId}</finalName>
-          <appendAssemblyId>false</appendAssemblyId>
-          <archive>
-            <manifest>
-              <mainClass>com.mkalita.App</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id> <!-- this is used for inheritance merges -->
-            <phase>package</phase> <!-- bind to the packaging phase -->
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -213,5 +238,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

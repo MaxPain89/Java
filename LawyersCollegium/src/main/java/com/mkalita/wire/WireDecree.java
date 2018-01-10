@@ -1,8 +1,8 @@
 package com.mkalita.wire;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mkalita.controllers.MdbController;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,11 +10,14 @@ import java.util.Date;
 
 @SuppressWarnings("unused")
 public class WireDecree {
+    private final static String datePattern = "dd/MM/yyyy";
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = datePattern)
     private Date date;
     private String accused;
     private String lawyer;
     private String collegium;
     private float amount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = datePattern)
     private Date payDate;
 
     @JsonCreator
@@ -74,7 +77,7 @@ public class WireDecree {
 
     @Override
     public String toString() {
-        DateFormat df = new SimpleDateFormat(MdbController.dateFormatStr);
+        DateFormat df = new SimpleDateFormat(datePattern);
         return String.format("%s| %-15s| %-35s| %-60s| %-10s| %s",
                 df.format(date), accused, lawyer, collegium, amount, df.format(payDate));
     }
