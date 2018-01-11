@@ -1,0 +1,21 @@
+<p>
+  Постановления
+</p>
+<table>
+  <tr>
+    <th>Дата постановления</th>
+    <th>Осужденный</th>
+    <th>Адвокат</th>
+    <th>Сумма</th>
+    <th>Дата выплаты</th>
+  </tr>
+  <ng-container *ngFor="let decree of decrees">
+    <tr>
+      <td>{{decree.date}}</td>
+      <td>{{decree.accused}}</td>
+      <td>{{decree.lawyer}}</td>
+      <td>{{decree.amount}} руб.</td>
+      <td>{{decree.payDate}}</td>
+    </tr>
+  </ng-container>
+</table>

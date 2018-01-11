@@ -38,6 +38,7 @@
     <dep.pmd.version>5.2.1</dep.pmd.version>
     <dep.jetty-server.version>9.4.8.v20171121</dep.jetty-server.version>
     <dep.spring.version>4.3.13.RELEASE</dep.spring.version>
+    <dep.servlet-api.version>3.0-alpha-1</dep.servlet-api.version>
   </properties>
 
   <dependencies>
@@ -52,6 +53,13 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>${dep.spring.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${dep.servlet-api.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!--ucanaccess driver-->
