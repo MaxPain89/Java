@@ -1,6 +1,16 @@
 <p>
   Постановления
 </p>
+<div>
+  <mat-form-field>
+    <mat-select placeholder="Выберете год" [(value)]="year" (change)="onChangeYear($event)">
+      <mat-option value=null>--</mat-option>
+      <mat-option *ngFor="let item of years" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 <div class="example-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Адвокат">
