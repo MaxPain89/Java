@@ -1,13 +1,8 @@
-TABLE {
-  width: 1200px; /* Ширина таблицы */
-  border: 1px solid black; /* Рамка вокруг таблицы */
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
 }
-TD, TH {
-  text-align: center; /* Выравнивание по левому краю */
-  padding: 3px; /* Поля вокруг содержимого ячеек */
-  border: 1px solid black; /* Рамка вокруг таблицы */
-}
-TH {
-  background: black; /* Цвет фона */
-  color: white; /* Цвет текста */
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
 }

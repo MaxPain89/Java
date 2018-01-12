@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DecreeService} from "../../services/decree.service";
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-decree',
@@ -8,18 +9,36 @@ import {DecreeService} from "../../services/decree.service";
 })
 export class DecreeComponent implements OnInit {
 
-  decrees: Decree[]
+  dataSource = new MatTableDataSource();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  displayedColumns;
+  decrees: Decree[];
   constructor(private decreeService: DecreeService) {
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   ngOnInit() {
     this.getDecrees();
+    this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate'];
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   getDecrees(){
     this.decreeService.getDecrees().subscribe(decreesResp => {
-      console.log(decreesResp);
       this.decrees = decreesResp;
+      this.dataSource.data = this.decrees;
     })
   }
 
