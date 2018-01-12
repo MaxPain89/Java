@@ -12,12 +12,13 @@ import {LawyerComponent} from './components/lawyer/lawyer.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import {MatSortModule} from '@angular/material/sort';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import {DecreeService} from "./services/decree.service";
 
 const appRoutes: Routes = [
-  {path:"decrees", component: DecreeComponent},
-  {path:"lawyers", component: LawyerComponent}
+  {path: "decrees", component: DecreeComponent},
+  {path: "lawyers", component: LawyerComponent}
 ];
 
 @NgModule({
@@ -35,9 +36,11 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     MatSortModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTabsModule
   ],
   providers: [DecreeService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
