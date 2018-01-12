@@ -1,21 +1,38 @@
 <p>
   Постановления
 </p>
-<table>
-  <tr>
-    <th>Дата постановления</th>
-    <th>Осужденный</th>
-    <th>Адвокат</th>
-    <th>Сумма</th>
-    <th>Дата выплаты</th>
-  </tr>
-  <ng-container *ngFor="let decree of decrees">
-    <tr>
-      <td>{{decree.date}}</td>
-      <td>{{decree.accused}}</td>
-      <td>{{decree.lawyer}}</td>
-      <td>{{decree.amount}} руб.</td>
-      <td>{{decree.payDate}}</td>
-    </tr>
-  </ng-container>
-</table>
+<div class="example-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Адвокат">
+  </mat-form-field>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Дата постановления</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.date}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="accused">
+      <mat-header-cell *matHeaderCellDef> Осужденный</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.accused}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lawyer">
+      <mat-header-cell *matHeaderCellDef> Адвокат</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.lawyer}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef> Сумма</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.amount}} руб.</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="payDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Дата выплаты</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.payDate}}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+</div>
