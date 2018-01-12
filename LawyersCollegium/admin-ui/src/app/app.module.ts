@@ -14,6 +14,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
 
 import {DecreeService} from "./services/decree.service";
 
@@ -40,7 +42,9 @@ const appRoutes: Routes = [
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDatepickerModule,
+    MatSelectModule
   ],
   providers: [DecreeService],
   bootstrap: [AppComponent]
