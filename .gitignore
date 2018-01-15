@@ -93,3 +93,5 @@ fabric.properties
 .idea
 
 *.iml
+/LawyersCollegium/for_delete/
+/LawyersCollegium/src/main/resources/static/*
