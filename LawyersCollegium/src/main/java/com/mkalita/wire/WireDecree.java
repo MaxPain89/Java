@@ -3,6 +3,7 @@ package com.mkalita.wire;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mkalita.utils.DateParser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,37 +11,42 @@ import java.util.Date;
 
 @SuppressWarnings("unused")
 public class WireDecree {
-    private final static String datePattern = "dd/MM/yyyy";
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = datePattern)
-    private Date date;
+    private String date;
     private String accused;
     private String lawyer;
     private String collegium;
     private float amount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = datePattern)
-    private Date payDate;
+    private String payDate;
 
     @JsonCreator
-    public WireDecree(@JsonProperty("date") Date date,
+    public WireDecree(@JsonProperty("date") String date,
                       @JsonProperty("accused") String accused,
                       @JsonProperty("lawyer") String lawyer,
                       @JsonProperty("collegium") String collegium,
                       @JsonProperty("amount") float amount,
-                      @JsonProperty("payDate") Date payDate) {
-        this.date = new Date(date.getTime());
+                      @JsonProperty("payDate") String payDate) {
+        this.date = date;
         this.accused = accused;
         this.lawyer = lawyer;
         this.collegium = collegium;
         this.amount = amount;
-        this.payDate = new Date(payDate.getTime());
+        this.payDate = payDate;
     }
 
-    public Date getDate() {
-        return new Date(date.getTime());
+    public String getDate() {
+        return date;
     }
 
-    public void setDate(Date date) {
-        this.date = new Date(date.getTime());
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
     }
 
     public String getAccused() {
@@ -59,14 +65,6 @@ public class WireDecree {
         this.amount = amount;
     }
 
-    public Date getPayDate() {
-        return new Date(payDate.getTime());
-    }
-
-    public void setPayDate(Date payDate) {
-        this.payDate = new Date(payDate.getTime());
-    }
-
     public String getLawyer() {
         return lawyer;
     }
@@ -77,8 +75,7 @@ public class WireDecree {
 
     @Override
     public String toString() {
-        DateFormat df = new SimpleDateFormat(datePattern);
         return String.format("%s| %-15s| %-35s| %-60s| %-10s| %s",
-                df.format(date), accused, lawyer, collegium, amount, df.format(payDate));
+                date, accused, lawyer, collegium, amount, payDate);
     }
 }

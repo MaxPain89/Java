@@ -2,8 +2,13 @@
   Постановления
 </p>
 <div>
+  <mat-slide-toggle
+    class="example-margin"
+    [checked]="isYearSelected"
+    (change)="onChangeYearSlider($event)">
+  </mat-slide-toggle>
   <mat-form-field>
-    <mat-select placeholder="Выберете год" [(value)]="year" (change)="onChangeYear($event)">
+    <mat-select placeholder="Выберете год" [(value)]="year" (change)="onChangeYear($event)" [disabled]="!isYearSelected">
       <mat-option value=null>--</mat-option>
       <mat-option *ngFor="let item of years" [value]="item">
         {{item}}
@@ -11,13 +16,24 @@
     </mat-select>
   </mat-form-field>
 </div>
-<div>
-  <mat-form-field>
-    <input matInput [matDatepicker]="picker" placeholder="Выберете дату">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-</div>
+<mat-slide-toggle
+  class="example-margin"
+  [checked]="!isYearSelected"
+  (change)="onChangePeriodSlider($event)">
+</mat-slide-toggle>
+<mat-form-field>
+  <input matInput [matDatepicker]="startPicker" placeholder="Начало периода:"
+         (dateChange)="changeStartDate($event)" [disabled]="isYearSelected">
+  <mat-datepicker-toggle matSuffix [for]="startPicker" [disabled]="isYearSelected"></mat-datepicker-toggle>
+  <mat-datepicker #startPicker [disabled]="isYearSelected"></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [matDatepicker]="endPicker" placeholder="Конец периода:"
+         (dateChange)="changeEndDate($event)" [disabled]="isYearSelected">
+  <mat-datepicker-toggle matSuffix [for]="endPicker" [disabled]="isYearSelected"></mat-datepicker-toggle>
+  <mat-datepicker #endPicker [disabled]="isYearSelected"></mat-datepicker>
+</mat-form-field>
+<button mat-raised-button (click)="applyPeriod()" [disabled]="!startPeriod || !endPeriod || isYearSelected">Показать</button>
 <div class="example-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Адвокат">

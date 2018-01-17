@@ -3,6 +3,8 @@ import {DecreeService} from "../../services/decree.service";
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {Moment} from "moment";
 
 @Component({
   selector: 'app-decree',
@@ -22,6 +24,9 @@ export class DecreeComponent implements OnInit {
   years: number[] = this.range(this.yearStart, this.currentYear);
   dataSource = new MatTableDataSource();
   displayedColumns;
+  startPeriod:string;
+  endPeriod:string;
+  isYearSelected: boolean = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -48,7 +53,24 @@ export class DecreeComponent implements OnInit {
   }
 
   getDecrees(){
-    this.decreeService.getDecrees(this.year).subscribe(decreesResp => {
+    this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
+      this.decrees = decreesResp;
+      this.dataSource.data = this.decrees;
+    })
+  }
+
+  changeStartDate(event: MatDatepickerInputEvent<Moment>){
+    this.startPeriod = event.value.format('DD/MM/YYYY');
+    console.log(this.startPeriod);
+  }
+
+  changeEndDate(event: MatDatepickerInputEvent<Moment>){
+    this.endPeriod = event.value.format('DD/MM/YYYY');
+    console.log(this.endPeriod);
+  }
+
+  applyPeriod(){
+    this.decreeService.getDecreesByPeriod(this.startPeriod, this.endPeriod).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
     })
@@ -61,6 +83,14 @@ export class DecreeComponent implements OnInit {
   onChangeYear(newValue) {
     this.year = newValue.value;
     this.getDecrees();
+  }
+
+  onChangeYearSlider(value) {
+    this.isYearSelected = value.checked;
+  }
+
+  onChangePeriodSlider(value) {
+    this.isYearSelected = !value.checked;
   }
 }
 

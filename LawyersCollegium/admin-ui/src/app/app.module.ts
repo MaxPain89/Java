@@ -16,6 +16,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import {DecreeService} from "./services/decree.service";
 
@@ -44,7 +46,9 @@ const appRoutes: Routes = [
     MatInputModule,
     MatTabsModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
+    MatSlideToggleModule
   ],
   providers: [DecreeService],
   bootstrap: [AppComponent]
