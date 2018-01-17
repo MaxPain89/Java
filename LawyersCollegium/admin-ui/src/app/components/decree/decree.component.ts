@@ -24,8 +24,8 @@ export class DecreeComponent implements OnInit {
   years: number[] = this.range(this.yearStart, this.currentYear);
   dataSource = new MatTableDataSource();
   displayedColumns;
-  startPeriod:string;
-  endPeriod:string;
+  startPeriod: Date;
+  endPeriod: Date;
   isYearSelected: boolean = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -60,12 +60,12 @@ export class DecreeComponent implements OnInit {
   }
 
   changeStartDate(event: MatDatepickerInputEvent<Moment>){
-    this.startPeriod = event.value.format('DD/MM/YYYY');
+    this.startPeriod = event.value.toDate();
     console.log(this.startPeriod);
   }
 
   changeEndDate(event: MatDatepickerInputEvent<Moment>){
-    this.endPeriod = event.value.format('DD/MM/YYYY');
+    this.endPeriod = event.value.toDate();
     console.log(this.endPeriod);
   }
 

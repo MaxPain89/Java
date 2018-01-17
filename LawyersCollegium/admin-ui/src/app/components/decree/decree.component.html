@@ -23,13 +23,13 @@
 </mat-slide-toggle>
 <mat-form-field>
   <input matInput [matDatepicker]="startPicker" placeholder="Начало периода:"
-         (dateChange)="changeStartDate($event)" [disabled]="isYearSelected">
+         (dateChange)="changeStartDate($event)" [disabled]="isYearSelected" [max]="endPeriod">
   <mat-datepicker-toggle matSuffix [for]="startPicker" [disabled]="isYearSelected"></mat-datepicker-toggle>
   <mat-datepicker #startPicker [disabled]="isYearSelected"></mat-datepicker>
 </mat-form-field>
 <mat-form-field>
   <input matInput [matDatepicker]="endPicker" placeholder="Конец периода:"
-         (dateChange)="changeEndDate($event)" [disabled]="isYearSelected">
+         (dateChange)="changeEndDate($event)" [disabled]="isYearSelected" [min]="startPeriod">
   <mat-datepicker-toggle matSuffix [for]="endPicker" [disabled]="isYearSelected"></mat-datepicker-toggle>
   <mat-datepicker #endPicker [disabled]="isYearSelected"></mat-datepicker>
 </mat-form-field>
