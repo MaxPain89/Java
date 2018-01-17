@@ -101,9 +101,18 @@ public class Decree extends ConfigurableFetchMode {
         return String.format("Decree{decreeId=%d, date=%s, lawyer=%s, accused='%s', amount=%s, date=%s}", id, date, lawyer, accused, amount, payDate);
     }
 
+    public void updateFromWire(WireDecree wireDecree) {
+        this.date = DateParser.dateFromStr(wireDecree.getDate());
+        this.accused = wireDecree.getAccused();
+        this.amount = wireDecree.getAmount();
+        this.payDate = DateParser.dateFromStr(wireDecree.getPayDate());
+    }
+
     public WireDecree toWire(){
         Collegium collegium = this.lawyer != null ? this.lawyer.getCollegium() : null;
-        return new WireDecree(DateParser.dateToStr(this.date),
+        return new WireDecree(
+                this.id,
+                DateParser.dateToStr(this.date),
                 this.accused,
                 this.lawyer != null ? lawyer.getFullName() : null,
                 collegium != null ? collegium.getName() : null,

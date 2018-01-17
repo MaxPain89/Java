@@ -3,6 +3,7 @@ package com.mkalita.controllers;
 import com.mkalita.jpa.Decree;
 import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.JPAUtil;
+import com.mkalita.webserver.exceptions.NotFoundException;
 import com.mkalita.wire.WireDecree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,12 @@ import java.util.stream.Collectors;
 public class DecreeController {
     private static final Logger log = LoggerFactory.getLogger(DecreeController.class);
     private EntityManager em;
+    private LawyerController lawyerController;
 
-    public DecreeController(EntityManager em) {
+    public DecreeController(EntityManager em,
+                            LawyerController lawyerController) {
         this.em = em;
+        this.lawyerController = lawyerController;
     }
 
     private static boolean checkDateRange(Date actualDate, Date startDate, Date endDate) {
@@ -70,16 +74,36 @@ public class DecreeController {
 
     private Decree _getDecree(Long decreeId) {
         return JPAUtil.getObject(em, "id", decreeId, Decree.class)
-                .orElseThrow(() -> new RuntimeException(String.format("Couldn't find decree %s", decreeId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Couldn't find decree with id %s", decreeId)));
     }
 
-    @SuppressWarnings("unused")
-    public void createDecree(WireDecree wireDecree, long lawyerId) {
+    public WireDecree createDecree(WireDecree wireDecree, Long lawyerId) {
         em.getTransaction().begin();
         Decree decree = new Decree(wireDecree);
-        Lawyer lawyer = em.getReference(Lawyer.class, lawyerId);
+        Lawyer lawyer = null;
+        if (lawyerId != null) {
+            lawyer = lawyerController._getLawyer(lawyerId);
+        }
         decree.setLawyer(lawyer);
         em.persist(decree);
         em.getTransaction().commit();
+        return decree.toWire();
+    }
+
+    public WireDecree updateDecree(Long decreeId, WireDecree wireDecree, Long lawyerId) {
+        em.getTransaction().begin();
+        Decree decree = _getDecree(decreeId);
+        Lawyer newLawyer = null;
+        if (lawyerId != null) {
+            newLawyer = lawyerController._getLawyer(lawyerId);
+        }
+        Lawyer lawyer = decree.getLawyer();
+        if (!Objects.equals(lawyer, newLawyer)) {
+            decree.setLawyer(newLawyer);
+        }
+        decree.updateFromWire(wireDecree);
+        em.merge(decree);
+        em.getTransaction().commit();
+        return decree.toWire();
     }
 }

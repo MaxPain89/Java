@@ -4,11 +4,8 @@ import com.mkalita.controllers.DecreeController;
 import com.mkalita.utils.DateParser;
 import com.mkalita.wire.WireDecree;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +34,33 @@ public class DecreeResource {
         } else {
             return decreeController.getAllDecrees();
         }
+    }
+
+    @RequestMapping(value = "/decrees", method = RequestMethod.POST)
+    public @ResponseBody
+    WireDecree createDecree(@RequestParam(required = false) Long lawyerId,
+                            @RequestBody WireDecree wireDecree,
+                            HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        return decreeController.createDecree(wireDecree, lawyerId);
+    }
+
+    @RequestMapping(value = "/decree/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    WireDecree createDecree(@PathVariable(value = "id") Long id,
+                            HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        return decreeController.getDecree(id);
+    }
+
+    @RequestMapping(value = "/decree/{id}", method = RequestMethod.PUT)
+    public @ResponseBody
+    WireDecree createDecree(@PathVariable(value = "id") Long id,
+                            @RequestParam(required = false) Long lawyerId,
+                            @RequestBody WireDecree wireDecree,
+                            HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        return decreeController.updateDecree(id, wireDecree, lawyerId);
     }
 
     private Date getDate(String date) {

@@ -57,6 +57,8 @@ public class Collegium {
     }
 
     public WireCollegium toWire(){
-        return new WireCollegium(this.name, this.other);
+        return new WireCollegium(this.id,
+                this.name,
+                this.other);
     }
 }
