@@ -73,7 +73,8 @@ public class Lawyer extends ConfigurableFetchMode{
     }
 
     public WireLawyer toWire(){
-        return new WireLawyer(this.fullName,
+        return new WireLawyer(this.id,
+                this.fullName,
                               this.isOut());
     }
 

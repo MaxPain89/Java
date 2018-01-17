@@ -1,16 +1,11 @@
 package com.mkalita.wire;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mkalita.utils.DateParser;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @SuppressWarnings("unused")
 public class WireDecree {
+    private Long id;
     private String date;
     private String accused;
     private String lawyer;
@@ -19,18 +14,28 @@ public class WireDecree {
     private String payDate;
 
     @JsonCreator
-    public WireDecree(@JsonProperty("date") String date,
+    public WireDecree(@JsonProperty("id") Long id,
+                      @JsonProperty("date") String date,
                       @JsonProperty("accused") String accused,
                       @JsonProperty("lawyer") String lawyer,
                       @JsonProperty("collegium") String collegium,
                       @JsonProperty("amount") float amount,
                       @JsonProperty("payDate") String payDate) {
+        this.id = id;
         this.date = date;
         this.accused = accused;
         this.lawyer = lawyer;
         this.collegium = collegium;
         this.amount = amount;
         this.payDate = payDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDate() {
