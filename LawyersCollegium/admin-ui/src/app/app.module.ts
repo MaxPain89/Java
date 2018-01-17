@@ -6,7 +6,7 @@ import {HttpClientModule} from "@angular/common/http";
 
 
 import {AppComponent} from './app.component';
-import {DecreeComponent} from './components/decree/decree.component';
+import {DecreesComponent} from './components/decrees/decrees.component';
 import {LawyerComponent} from './components/lawyer/lawyer.component';
 import {CollegiumComponent} from './components/collegium/collegium.component';
 
@@ -22,7 +22,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {DecreeService} from "./services/decree.service";
 
 const appRoutes: Routes = [
-  {path: "decrees", component: DecreeComponent},
+  {path: "decrees", component: DecreesComponent},
   {path: "lawyers", component: LawyerComponent},
   {path: "collegium", component: CollegiumComponent}
 ];
@@ -30,7 +30,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    DecreeComponent,
+    DecreesComponent,
     LawyerComponent,
     CollegiumComponent
   ],

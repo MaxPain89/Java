@@ -7,15 +7,15 @@ import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Moment} from "moment";
 
 @Component({
-  selector: 'app-decree',
-  templateUrl: './decree.component.html',
-  styleUrls: ['./decree.component.css'],
+  selector: 'app-decrees',
+  templateUrl: './decrees.component.html',
+  styleUrls: ['./decrees.component.css'],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},]
 })
-export class DecreeComponent implements OnInit {
+export class DecreesComponent implements OnInit {
 
   decrees: Decree[];
   currentYear: number =(new Date()).getFullYear();
