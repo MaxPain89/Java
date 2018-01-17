@@ -1,5 +1,6 @@
 package com.mkalita.jpa;
 
+import com.mkalita.utils.DateParser;
 import com.mkalita.wire.WireDecree;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -21,15 +22,16 @@ public class Decree extends ConfigurableFetchMode {
     private float amount;
     private Date payDate;
 
+
     public Decree() {
     }
 
     public Decree(WireDecree wireDecree) {
-        this.date = wireDecree.getDate();
+        this.date = DateParser.dateFromStr(wireDecree.getDate());
         this.lawyer = null;
         this.accused = wireDecree.getAccused();
         this.amount = wireDecree.getAmount();
-        this.payDate = wireDecree.getPayDate();
+        this.payDate = DateParser.dateFromStr(wireDecree.getPayDate());
     }
 
     @Id
@@ -101,12 +103,12 @@ public class Decree extends ConfigurableFetchMode {
 
     public WireDecree toWire(){
         Collegium collegium = this.lawyer != null ? this.lawyer.getCollegium() : null;
-        return new WireDecree(this.date,
+        return new WireDecree(DateParser.dateToStr(this.date),
                 this.accused,
                 this.lawyer != null ? lawyer.getFullName() : null,
                 collegium != null ? collegium.getName() : null,
                 this.amount,
-                this.payDate);
+                DateParser.dateToStr(this.payDate));
     }
 
     @SuppressWarnings("unused")
