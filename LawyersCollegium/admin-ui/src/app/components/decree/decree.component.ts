@@ -1,11 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DecreeService} from "../../services/decree.service";
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-decree',
   templateUrl: './decree.component.html',
-  styleUrls: ['./decree.component.css']
+  styleUrls: ['./decree.component.css'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},]
 })
 export class DecreeComponent implements OnInit {
 
@@ -19,7 +25,7 @@ export class DecreeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private decreeService: DecreeService) {
+  constructor(private decreeService: DecreeService, private adapter: DateAdapter<any>) {
   }
 
   ngOnInit() {

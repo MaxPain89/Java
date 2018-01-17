@@ -8,7 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {AppComponent} from './app.component';
 import {DecreeComponent} from './components/decree/decree.component';
 import {LawyerComponent} from './components/lawyer/lawyer.component';
-import { CollegiumComponent } from './components/collegium/collegium.component';
+import {CollegiumComponent} from './components/collegium/collegium.component';
 
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatInputModule, MatPaginatorModule} from '@angular/material';
