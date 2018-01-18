@@ -104,7 +104,7 @@ export class DecreesComponent implements OnInit {
 }
 
 export interface Decree {
-  if: number,
+  id: number,
   date: string,
   accused: string,
   lawyer: string,

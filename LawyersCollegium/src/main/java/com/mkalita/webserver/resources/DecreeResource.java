@@ -5,7 +5,6 @@ import com.mkalita.utils.DateParser;
 import com.mkalita.wire.WireDecree;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +21,7 @@ public class DecreeResource {
     public @ResponseBody
     List<WireDecree> getDecrees(@RequestParam(value = "year", required = false) Integer year,
                                 @RequestParam(value = "startDate", required = false) String startDate,
-                                @RequestParam(value = "endDate", required = false) String endDate,
-                                HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
+                                @RequestParam(value = "endDate", required = false) String endDate) {
         if (startDate != null || endDate != null) {
             Date start = getDate(startDate);
             Date end = getDate(endDate);
@@ -39,17 +36,13 @@ public class DecreeResource {
     @RequestMapping(value = "/decrees", method = RequestMethod.POST)
     public @ResponseBody
     WireDecree createDecree(@RequestParam(required = false) Long lawyerId,
-                            @RequestBody WireDecree wireDecree,
-                            HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
+                            @RequestBody WireDecree wireDecree) {
         return decreeController.createDecree(wireDecree, lawyerId);
     }
 
     @RequestMapping(value = "/decree/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    WireDecree createDecree(@PathVariable(value = "id") Long id,
-                            HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
+    WireDecree createDecree(@PathVariable(value = "id") Long id) {
         return decreeController.getDecree(id);
     }
 
@@ -57,9 +50,7 @@ public class DecreeResource {
     public @ResponseBody
     WireDecree createDecree(@PathVariable(value = "id") Long id,
                             @RequestParam(required = false) Long lawyerId,
-                            @RequestBody WireDecree wireDecree,
-                            HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
+                            @RequestBody WireDecree wireDecree) {
         return decreeController.updateDecree(id, wireDecree, lawyerId);
     }
 
