@@ -6,20 +6,25 @@ import * as moment from "moment";
 @Injectable()
 export class DecreeService {
 
-  path: string = "http://localhost:8085/decrees";
+  decreesPath: string = "http://localhost:8085/decrees";
+  decreePath: string = "http://localhost:8085/decree/";
 
   constructor(private http: HttpClient) { }
+
+  getDecree(id:number):Observable<any> {
+    return this.http.get(this.decreePath + id);
+  }
 
   getDecreesByYear(year:number):Observable<any> {
     let params: string = "";
     if (year) {
       params = "?year=" + year;
     }
-    return this.http.get(this.path + params);
+    return this.http.get(this.decreesPath + params);
   }
 
   getDecreesByPeriod(startDate:Date, endDate:Date ):Observable<any> {
-    return this.http.get(this.path + "?startDate=" + moment(startDate.toDateString()).format("DD/MM/YYYY")
+    return this.http.get(this.decreesPath + "?startDate=" + moment(startDate.toDateString()).format("DD/MM/YYYY")
       + "&endDate=" + moment(endDate.toDateString()).format("DD/MM/YYYY"));
   }
 }

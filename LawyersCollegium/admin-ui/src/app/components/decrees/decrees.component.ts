@@ -5,6 +5,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Moment} from "moment";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-decrees',
@@ -18,7 +19,7 @@ import {Moment} from "moment";
 export class DecreesComponent implements OnInit {
 
   decrees: Decree[];
-  currentYear: number =(new Date()).getFullYear();
+  currentYear: number = (new Date()).getFullYear();
   year: number = this.currentYear;
   yearStart = 2000;
   years: number[] = this.range(this.yearStart, this.currentYear);
@@ -30,14 +31,13 @@ export class DecreesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private decreeService: DecreeService, private adapter: DateAdapter<any>) {
+  constructor(private decreeService: DecreeService, private adapter: DateAdapter<any>, private router: Router) {
   }
 
   ngOnInit() {
     this.year = this.currentYear;
     this.getDecrees();
-    this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate'];
-    console.log(this.years);
+    this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
   }
 
   applyFilter(filterValue: string) {
@@ -52,24 +52,24 @@ export class DecreesComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  getDecrees(){
+  getDecrees() {
     this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
     })
   }
 
-  changeStartDate(event: MatDatepickerInputEvent<Moment>){
+  changeStartDate(event: MatDatepickerInputEvent<Moment>) {
     this.startPeriod = event.value.toDate();
     console.log(this.startPeriod);
   }
 
-  changeEndDate(event: MatDatepickerInputEvent<Moment>){
+  changeEndDate(event: MatDatepickerInputEvent<Moment>) {
     this.endPeriod = event.value.toDate();
     console.log(this.endPeriod);
   }
 
-  applyPeriod(){
+  applyPeriod() {
     this.decreeService.getDecreesByPeriod(this.startPeriod, this.endPeriod).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
@@ -92,9 +92,19 @@ export class DecreesComponent implements OnInit {
   onChangePeriodSlider(value) {
     this.isYearSelected = !value.checked;
   }
+
+  deleteButton(id: number) {
+    console.log('delete ' + id);
+  }
+
+  editButton(id: number) {
+    console.log('edit' + id);
+    this.router.navigate(['/decree/' + id]);
+  }
 }
 
-interface Decree {
+export interface Decree {
+  if: number,
   date: string,
   accused: string,
   lawyer: string,

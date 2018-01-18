@@ -3,6 +3,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
+import { FormsModule } from '@angular/forms';
 
 
 import {AppComponent} from './app.component';
@@ -18,11 +19,14 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatIconModule} from "@angular/material";
 
 import {DecreeService} from "./services/decree.service";
+import {DecreeComponent} from './components/decree/decree.component';
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
+  {path: "decree/:id", component: DecreeComponent},
   {path: "lawyers", component: LawyerComponent},
   {path: "collegium", component: CollegiumComponent}
 ];
@@ -32,7 +36,8 @@ const appRoutes: Routes = [
     AppComponent,
     DecreesComponent,
     LawyerComponent,
-    CollegiumComponent
+    CollegiumComponent,
+    DecreeComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +53,9 @@ const appRoutes: Routes = [
     MatDatepickerModule,
     MatSelectModule,
     MatButtonModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    FormsModule,
+    MatIconModule
   ],
   providers: [DecreeService],
   bootstrap: [AppComponent]

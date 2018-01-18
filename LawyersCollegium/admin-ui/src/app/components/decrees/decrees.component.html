@@ -3,7 +3,7 @@
 </p>
 <div>
   <mat-slide-toggle
-    class="example-margin"
+    color="primary"
     [checked]="isYearSelected"
     (change)="onChangeYearSlider($event)">
   </mat-slide-toggle>
@@ -17,7 +17,7 @@
   </mat-form-field>
 </div>
 <mat-slide-toggle
-  class="example-margin"
+  color="primary"
   [checked]="!isYearSelected"
   (change)="onChangePeriodSlider($event)">
 </mat-slide-toggle>
@@ -60,6 +60,17 @@
     <ng-container matColumnDef="payDate">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Дата выплаты</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.payDate}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="buttons">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editButton(element.id)">
+          <mat-icon>mode_edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="deleteButton(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
