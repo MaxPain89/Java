@@ -110,7 +110,6 @@ export class DecreesComponent implements OnInit {
   }
 
   editButton(id: number) {
-    console.log('edit' + id);
     this.router.navigate(['/decree/' + id]);
   }
 }
