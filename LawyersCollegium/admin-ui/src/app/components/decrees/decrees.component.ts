@@ -42,7 +42,6 @@ export class DecreesComponent implements OnInit {
   ngOnInit() {
     this.year = this.currentYear;
     this.getDecrees();
-    this.getLawyersMap();
     this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
   }
 
@@ -62,6 +61,7 @@ export class DecreesComponent implements OnInit {
     this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
+      this.getLawyersMap();
     })
   }
 

@@ -21,7 +21,6 @@ export class DecreeComponent implements OnInit {
               private router: Router) {
     this.route.params.subscribe( params => this.decreeId = params['id']);
     this.getDecree();
-    this.getLawyersMap();
   }
 
 
@@ -32,6 +31,7 @@ export class DecreeComponent implements OnInit {
     this.decreeService.getDecree(this.decreeId).subscribe(decreesResp => {
       this.currentDecree = decreesResp;
       this.currentLawyerId = this.currentDecree.lawyerId;
+      this.getLawyersMap();
     })
   }
 
