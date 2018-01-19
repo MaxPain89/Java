@@ -38,8 +38,12 @@ export class DecreeService {
     return this.http.post(this.decreesPath, decree, { headers: this.headers });
   }
 
-  updateDecree(id: number, decree: Decree): Observable<any> {
-    return this.http.put(this.decreePath + id, decree, {headers: this.headers});
+  updateDecree(id: number, decree: Decree, lawyerId: number): Observable<any> {
+    let params: string = "";
+    if (lawyerId) {
+      params = "?lawyerId=" + lawyerId;
+    }
+    return this.http.put(this.decreePath + id + params, decree, {headers: this.headers});
   }
 
 }
