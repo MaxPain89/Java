@@ -1,103 +1,80 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {Decree} from "../decrees/decrees.component";
 import {DecreeService} from "../../services/decree.service";
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {ActivatedRoute, Router} from "@angular/router";
+import {LawyerService} from "../../services/lawyer.service";
+import * as moment from 'moment';
+import {MatDatepickerInputEvent} from "@angular/material";
 import {Moment} from "moment";
 
 @Component({
   selector: 'app-decree',
   templateUrl: './decree.component.html',
-  styleUrls: ['./decree.component.css'],
-  providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},]
+  styleUrls: ['./decree.component.css']
 })
 export class DecreeComponent implements OnInit {
+  decreeId:number=43192;
+  currentDecree: Decree = <Decree>{};
+  currentLawyerId: number = 1;
+  lawyersMap = {};
+  currentDecreeDate: Moment;
+  currentDecreePayDate: Moment;
 
-  decrees: Decree[];
-  currentYear: number =(new Date()).getFullYear();
-  year: number = this.currentYear;
-  yearStart = 2000;
-  years: number[] = this.range(this.yearStart, this.currentYear);
-  dataSource = new MatTableDataSource();
-  displayedColumns;
-  startPeriod: Date;
-  endPeriod: Date;
-  isYearSelected: boolean = true;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  constructor(private decreeService: DecreeService, private adapter: DateAdapter<any>) {
+  constructor(private decreeService: DecreeService,
+              private lawyerService: LawyerService,
+              private route: ActivatedRoute,
+              private router: Router) {
+    this.route.params.subscribe( params => this.decreeId = params['id']);
+    this.getDecree();
   }
+
 
   ngOnInit() {
-    this.year = this.currentYear;
-    this.getDecrees();
-    this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate'];
-    console.log(this.years);
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
-  }
-
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  getDecrees(){
-    this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
-      this.decrees = decreesResp;
-      this.dataSource.data = this.decrees;
+  getDecree() {
+    this.decreeService.getDecree(this.decreeId).subscribe(decreesResp => {
+      this.currentDecree = decreesResp;
+      this.currentLawyerId = this.currentDecree.lawyerId;
+      this.currentDecreeDate = moment(this.currentDecree.date, 'DD/MM/YYYY');
+      this.currentDecreePayDate = moment(this.currentDecree.payDate, 'DD/MM/YYYY');
+      this.getLawyersMap();
     })
   }
 
-  changeStartDate(event: MatDatepickerInputEvent<Moment>){
-    this.startPeriod = event.value.toDate();
-    console.log(this.startPeriod);
-  }
-
-  changeEndDate(event: MatDatepickerInputEvent<Moment>){
-    this.endPeriod = event.value.toDate();
-    console.log(this.endPeriod);
-  }
-
-  applyPeriod(){
-    this.decreeService.getDecreesByPeriod(this.startPeriod, this.endPeriod).subscribe(decreesResp => {
-      this.decrees = decreesResp;
-      this.dataSource.data = this.decrees;
+  getLawyersMap() {
+    this.lawyerService.getLawyers().subscribe(lawyersResp => {
+      let lawyersMap = {};
+      lawyersResp.forEach(function (lawyer) {
+        lawyersMap[lawyer.id] = lawyer;
+      });
+      this.lawyersMap = lawyersMap;
     })
   }
 
-  range(start, end) {
-    return Array(end - start + 1).fill(1).map((_, idx) => start + idx);
+  getLawyersMapKeys() : Array<number> {
+    return Object.keys(this.lawyersMap).map(Number);
   }
 
-  onChangeYear(newValue) {
-    this.year = newValue.value;
-    this.getDecrees();
+  saveChanges() {
+    this.decreeService.updateDecree(this.currentDecree.id, this.currentDecree, this.currentLawyerId).subscribe(resp => {
+      this.router.navigate(['/decrees']);
+    })
   }
 
-  onChangeYearSlider(value) {
-    this.isYearSelected = value.checked;
+  cancel() {
+    this.router.navigate(['/decrees']);
   }
 
-  onChangePeriodSlider(value) {
-    this.isYearSelected = !value.checked;
+  onChangeLawyer(newValue) {
+    this.currentLawyerId = newValue.value;
   }
-}
 
-interface Decree {
-  date: string,
-  accused: string,
-  lawyer: string,
-  amount: number,
-  payDate: string
+  onChangeDecreeDate(event: MatDatepickerInputEvent<Moment>) {
+    this.currentDecree.date = event.value.format("DD/MM/YYYY");
+  }
+
+  onChangeDecreePayDate(event: MatDatepickerInputEvent<Moment>) {
+    this.currentDecree.payDate = event.value.format("DD/MM/YYYY");
+  }
 }

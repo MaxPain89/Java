@@ -17,7 +17,7 @@ public class Lawyer extends ConfigurableFetchMode{
     private Collegium collegium;
     private boolean out;
 
-    public Lawyer(WireLawyer wirelawyer) {
+    public Lawyer(WireLawyer wirelawyer, Collegium collegium) {
         this.fullName = wirelawyer.getFullName();
         this.out = wirelawyer.isOut();
     }
@@ -74,8 +74,14 @@ public class Lawyer extends ConfigurableFetchMode{
 
     public WireLawyer toWire(){
         return new WireLawyer(this.id,
+                this.collegium != null ? collegium.getId() : null,
                 this.fullName,
                               this.isOut());
+    }
+
+    public void updateFromWire(WireLawyer wireLawyer) {
+        this.fullName = wireLawyer.getFullName();
+        this.out = wireLawyer.isOut();
     }
 
     @SuppressWarnings("unused")

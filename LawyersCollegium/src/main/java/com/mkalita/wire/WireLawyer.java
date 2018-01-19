@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @SuppressWarnings("unused")
 public class WireLawyer {
     private Long id;
+    private Long collegiumId;
     private String fullName;
     private boolean out;
 
     @JsonCreator
     public WireLawyer(@JsonProperty("id") Long id,
+                      @JsonProperty("collegiumId") Long collegiumId,
                       @JsonProperty("fullname") String fullName,
                       @JsonProperty("out") boolean out) {
         this.id = id;
@@ -40,5 +42,13 @@ public class WireLawyer {
 
     public void setOut(boolean out) {
         this.out = out;
+    }
+
+    public Long getCollegiumId() {
+        return collegiumId;
+    }
+
+    public void setCollegiumId(Long collegiumId) {
+        this.collegiumId = collegiumId;
     }
 }

@@ -1,8 +1,11 @@
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
+.decree-card {
+  margin-top: 5px;
+  width: 350px;
 }
 
-.mat-header-cell.mat-sort-header-sorted {
-  color: black;
+.decree-card-actions {
+}
+
+.decree-card-field {
+  width: 320px;
 }

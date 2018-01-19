@@ -42,6 +42,14 @@ public class JPAUtil {
 
     public static <T> List<T> getObjects(
             final EntityManager em,
+            final JPASortParams sortParams,
+            final Class<T> aClass) {
+        return getObjects(em, Collections.emptyMap(), sortParams, aClass);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public static <T> List<T> getObjects(
+            final EntityManager em,
             final Map<String, Object> conditions,
             final JPASortParams sortParams,
             final Class<T> aClass) {
