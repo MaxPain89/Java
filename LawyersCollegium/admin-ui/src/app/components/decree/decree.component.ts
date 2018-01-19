@@ -3,6 +3,9 @@ import {Decree} from "../decrees/decrees.component";
 import {DecreeService} from "../../services/decree.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LawyerService} from "../../services/lawyer.service";
+import * as moment from 'moment';
+import {MatDatepickerInputEvent} from "@angular/material";
+import {Moment} from "moment";
 
 @Component({
   selector: 'app-decree',
@@ -14,6 +17,8 @@ export class DecreeComponent implements OnInit {
   currentDecree: Decree = <Decree>{};
   currentLawyerId: number = 1;
   lawyersMap = {};
+  currentDecreeDate: Moment;
+  currentDecreePayDate: Moment;
 
   constructor(private decreeService: DecreeService,
               private lawyerService: LawyerService,
@@ -31,6 +36,8 @@ export class DecreeComponent implements OnInit {
     this.decreeService.getDecree(this.decreeId).subscribe(decreesResp => {
       this.currentDecree = decreesResp;
       this.currentLawyerId = this.currentDecree.lawyerId;
+      this.currentDecreeDate = moment(this.currentDecree.date, 'DD/MM/YYYY');
+      this.currentDecreePayDate = moment(this.currentDecree.payDate, 'DD/MM/YYYY');
       this.getLawyersMap();
     })
   }
@@ -61,5 +68,13 @@ export class DecreeComponent implements OnInit {
 
   onChangeLawyer(newValue) {
     this.currentLawyerId = newValue.value;
+  }
+
+  onChangeDecreeDate(event: MatDatepickerInputEvent<Moment>) {
+    this.currentDecree.date = event.value.format("DD/MM/YYYY");
+  }
+
+  onChangeDecreePayDate(event: MatDatepickerInputEvent<Moment>) {
+    this.currentDecree.payDate = event.value.format("DD/MM/YYYY");
   }
 }

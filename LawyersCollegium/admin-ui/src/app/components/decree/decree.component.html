@@ -1,42 +1,48 @@
-<div>
+<mat-card class="decree-card">
   <div>
-    <mat-form-field>
-      <input matInput placeholder="Дата постановления:" [(ngModel)]="currentDecree.date">
-    </mat-form-field>
+    <div>
+      <mat-form-field class="decree-card-field">
+        <input matInput [matDatepicker]="date" placeholder="Дата постановления:"
+               (dateChange)="onChangeDecreeDate($event)" [(ngModel)]="currentDecreeDate">
+        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+        <mat-datepicker #date></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="decree-card-field">
+        <input matInput placeholder="Осужденный:" [(ngModel)]="currentDecree.accused">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="decree-card-field">
+        <mat-select placeholder="Выберете адвоката" [(value)]="currentLawyerId" (change)="onChangeLawyer($event)">
+          <mat-option value=null>--</mat-option>
+          <mat-option *ngFor="let key of getLawyersMapKeys()" [value]="key">
+            {{lawyersMap[key].fullName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="decree-card-field">
+        <input matInput placeholder="Сумма" [(ngModel)]="currentDecree.amount">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="decree-card-field">
+        <input matInput [matDatepicker]="payDate" placeholder="Дата оплаты:"
+               (dateChange)="onChangeDecreePayDate($event)" [(ngModel)]="currentDecreePayDate">
+        <mat-datepicker-toggle matSuffix [for]="payDate"></mat-datepicker-toggle>
+        <mat-datepicker #payDate></mat-datepicker>
+      </mat-form-field>
+    </div>
   </div>
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Осужденный:" [(ngModel)]="currentDecree.accused">
-    </mat-form-field>
-  </div>
-  <div>
-    <!--<mat-form-field>-->
-      <!--<input matInput placeholder="Адвокат" [(ngModel)]="currentDecree.lawyerId">-->
-    <!--</mat-form-field>-->
-    <mat-form-field>
-      <mat-select placeholder="Выберете адвоката" [(value)]="currentLawyerId" (change)="onChangeLawyer($event)">
-        <mat-option value=null>--</mat-option>
-        <mat-option *ngFor="let key of getLawyersMapKeys()" [value]="key">
-          {{lawyersMap[key].fullName}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Сумма" [(ngModel)]="currentDecree.amount">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="Дата оплаты:" [(ngModel)]="currentDecree.payDate">
-    </mat-form-field>
-  </div>
-</div>
-<button mat-icon-button color="primary" (click)="saveChanges()">
-  <mat-icon>save</mat-icon>
-</button>
-<button mat-icon-button color="primary" (click)="cancel()">
-  <mat-icon>cancel</mat-icon>
-</button>
-
+  <mat-card-actions class="decree-card-actions" align="end">
+    <button mat-icon-button color="primary" (click)="saveChanges()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" (click)="cancel()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -19,10 +19,13 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCardModule} from '@angular/material/card';
 
 import {DecreeService} from "./services/decree.service";
 import {DecreeComponent} from './components/decree/decree.component';
 import {LawyerService} from "./services/lawyer.service";
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-moment-adapter";
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
@@ -55,10 +58,14 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatSlideToggleModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
   ],
   providers: [DecreeService,
-    LawyerService],
+              LawyerService,
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
