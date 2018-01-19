@@ -35,21 +35,21 @@ public class DecreeResource {
 
     @RequestMapping(value = "/decrees", method = RequestMethod.POST)
     public @ResponseBody
-    WireDecree createDecree(@RequestParam(required = false) Long lawyerId,
+    WireDecree createDecree(@RequestParam Long lawyerId,
                             @RequestBody WireDecree wireDecree) {
         return decreeController.createDecree(wireDecree, lawyerId);
     }
 
     @RequestMapping(value = "/decree/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    WireDecree createDecree(@PathVariable(value = "id") Long id) {
+    WireDecree getDecree(@PathVariable(value = "id") Long id) {
         return decreeController.getDecree(id);
     }
 
     @RequestMapping(value = "/decree/{id}", method = RequestMethod.PUT)
     public @ResponseBody
-    WireDecree createDecree(@PathVariable(value = "id") Long id,
-                            @RequestParam(required = false) Long lawyerId,
+    WireDecree updateDecree(@PathVariable Long id,
+                            @RequestParam Long lawyerId,
                             @RequestBody WireDecree wireDecree) {
         return decreeController.updateDecree(id, wireDecree, lawyerId);
     }

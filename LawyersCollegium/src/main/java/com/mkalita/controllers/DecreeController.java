@@ -104,6 +104,6 @@ public class DecreeController {
         decree.updateFromWire(wireDecree);
         em.merge(decree);
         em.getTransaction().commit();
-        return decree.toWire();
+        return getDecree(decreeId);
     }
 }

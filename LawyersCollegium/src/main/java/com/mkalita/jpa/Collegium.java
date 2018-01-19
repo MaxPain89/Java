@@ -61,4 +61,9 @@ public class Collegium {
                 this.name,
                 this.other);
     }
+
+    public void updateFromWire(WireCollegium wireCollegium) {
+        this.name = wireCollegium.getName();
+        this.other = wireCollegium.getOther();
+    }
 }
