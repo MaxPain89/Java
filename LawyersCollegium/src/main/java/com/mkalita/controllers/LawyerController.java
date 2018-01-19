@@ -28,7 +28,7 @@ public class LawyerController {
 
     @SuppressWarnings("WeakerAccess")
     public List<Lawyer> _getLawyers() {
-        return JPAUtil.getObjects(em, null, null, Lawyer.class);
+        return JPAUtil.getObjects(em, null, Lawyer.class);
     }
 
     public List<WireLawyer> getLawyers() {

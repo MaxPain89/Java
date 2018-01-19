@@ -6,6 +6,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Moment} from "moment";
 import {Router} from "@angular/router";
+import {LawyerService} from "../../services/lawyer.service";
 
 @Component({
   selector: 'app-decrees',
@@ -28,15 +29,20 @@ export class DecreesComponent implements OnInit {
   startPeriod: Date;
   endPeriod: Date;
   isYearSelected: boolean = true;
+  lawyersMap = {};
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private decreeService: DecreeService, private adapter: DateAdapter<any>, private router: Router) {
+  constructor(private decreeService: DecreeService,
+              private lawyerService: LawyerService,
+              private adapter: DateAdapter<any>,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.year = this.currentYear;
     this.getDecrees();
+    this.getLawyersMap();
     this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
   }
 
@@ -56,6 +62,16 @@ export class DecreesComponent implements OnInit {
     this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
+    })
+  }
+
+  getLawyersMap() {
+    this.lawyerService.getLawyers().subscribe(lawyersResp => {
+      let lawyersMap = {};
+      lawyersResp.forEach(function (lawyer) {
+        lawyersMap[lawyer.id] = lawyer;
+      });
+      this.lawyersMap = lawyersMap;
     })
   }
 
@@ -107,7 +123,7 @@ export interface Decree {
   id: number,
   date: string,
   accused: string,
-  lawyer: string,
+  lawyerId: number,
   amount: number,
   payDate: string
 }

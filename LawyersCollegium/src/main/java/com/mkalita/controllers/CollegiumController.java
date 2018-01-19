@@ -23,7 +23,7 @@ public class CollegiumController {
 
     @SuppressWarnings("WeakerAccess")
     public List<Collegium> _getCollegiums() {
-        return JPAUtil.getObjects(em, null, null, Collegium.class);
+        return JPAUtil.getObjects(em, null, Collegium.class);
     }
 
     public List<WireCollegium> getCollegiums() {

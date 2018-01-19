@@ -16,7 +16,7 @@ public class LawyerResource {
 
     @RequestMapping(value = "/lawyers", method = RequestMethod.GET)
     public @ResponseBody
-    List<WireLawyer> getDecrees() {
+    List<WireLawyer> getLawyers() {
         return lawyerController.getLawyers();
     }
 

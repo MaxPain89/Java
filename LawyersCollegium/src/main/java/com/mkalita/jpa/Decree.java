@@ -114,7 +114,7 @@ public class Decree extends ConfigurableFetchMode {
                 this.id,
                 DateParser.dateToStr(this.date),
                 this.accused,
-                this.lawyer != null ? lawyer.getFullName() : null,
+                this.lawyer != null ? lawyer.getId() : null,
                 collegium != null ? collegium.getName() : null,
                 this.amount,
                 DateParser.dateToStr(this.payDate));

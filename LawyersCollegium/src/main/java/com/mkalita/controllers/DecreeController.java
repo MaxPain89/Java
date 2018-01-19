@@ -35,7 +35,7 @@ public class DecreeController {
     }
 
     private List<Decree> _getAllDecrees() {
-        return JPAUtil.getObjects(em, Collections.emptyMap(), null, Decree.class);
+        return JPAUtil.getObjects(em, null, Decree.class);
     }
 
     @SuppressWarnings("unused")
