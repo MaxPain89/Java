@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CollegiumComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
+}
 
+export interface Collegium {
+  id: number,
+  name: String,
+  other: String
 }

@@ -26,12 +26,17 @@ import {DecreeComponent} from './components/decree/decree.component';
 import {LawyerService} from "./services/lawyer.service";
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-moment-adapter";
+import { LawyerComponent } from './components/lawyer/lawyer.component';
+import { CollegiumsComponent } from './components/collegiums/collegiums.component';
+import {CollegiumService} from "./services/collegium.service";
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
   {path: "decree/:id", component: DecreeComponent},
   {path: "lawyers", component: LawyersComponent},
-  {path: "collegium", component: CollegiumComponent}
+  {path: "lawyer/:id", component: LawyerComponent},
+  {path: "collegiums", component: CollegiumsComponent},
+  {path: "collegium/:id", component: CollegiumComponent}
 ];
 
 @NgModule({
@@ -40,7 +45,9 @@ const appRoutes: Routes = [
     DecreesComponent,
     LawyersComponent,
     CollegiumComponent,
-    DecreeComponent
+    DecreeComponent,
+    LawyerComponent,
+    CollegiumsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +70,7 @@ const appRoutes: Routes = [
   ],
   providers: [DecreeService,
               LawyerService,
+              CollegiumService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],

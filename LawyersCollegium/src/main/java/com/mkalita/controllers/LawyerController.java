@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,18 @@ public class LawyerController {
         return JPAUtil.getObjects(em, null, Lawyer.class);
     }
 
+    public List<Lawyer> _getLawyersByCollegium(long collegiumId) {
+        Map<String, Object> conditions = new HashMap<>();
+        conditions.put("collegium.id", collegiumId);
+        return JPAUtil.getObjects(em, conditions, null, Lawyer.class);
+    }
+
     public List<WireLawyer> getLawyers() {
         return _getLawyers().stream().map(Lawyer::toWire).collect(Collectors.toList());
+    }
+
+    public List<WireLawyer> getLawyers(Long collegiumId) {
+        return _getLawyersByCollegium(collegiumId).stream().map(Lawyer::toWire).collect(Collectors.toList());
     }
 
     public Lawyer _getLawyer(long lawyerId) {

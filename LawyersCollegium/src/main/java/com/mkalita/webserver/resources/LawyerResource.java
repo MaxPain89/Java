@@ -16,8 +16,12 @@ public class LawyerResource {
 
     @RequestMapping(value = "/lawyers", method = RequestMethod.GET)
     public @ResponseBody
-    List<WireLawyer> getLawyers() {
-        return lawyerController.getLawyers();
+    List<WireLawyer> getLawyers(@RequestParam(required = false) Long collegiumId) {
+        if (collegiumId != null) {
+            return lawyerController.getLawyers(collegiumId);
+        } else {
+            return lawyerController.getLawyers();
+        }
     }
 
     @RequestMapping(value = "/lawyer/{id}", method = RequestMethod.GET)
@@ -33,7 +37,7 @@ public class LawyerResource {
         return lawyerController.createLawyer(wireLawyer, collegiumId);
     }
 
-    @RequestMapping(value = "/lawyer/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/lawyer/{id}", method = RequestMethod.PUT)
     public @ResponseBody
     WireLawyer updateLawyer(@PathVariable Long id,
                             @RequestParam(required = false) Long collegiumId,

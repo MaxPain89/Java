@@ -1,0 +1,39 @@
+<mat-card class="lawyer-card">
+  <div>
+    <div>
+      <mat-form-field class="lawyer-card-field">
+        <input matInput placeholder="ФИО:" [(ngModel)]="currentLawyer.fullName">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="lawyer-card-field">
+        <mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">
+          <mat-option value=null>--</mat-option>
+          <mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">
+            {{collegiumsMaps[key].name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="lawyer-card-field">
+        <div>
+          <mat-slide-toggle mat-input
+            color="primary"
+            [checked]="currentLawyer.out"
+            (change)="onChangeOutSlider($event)">
+          </mat-slide-toggle>
+          <input class="hidden" matInput placeholder="Выбыл"  [(ngModel)]="currentLawyer.out">
+        </div>
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-card-actions class="lawyer-card-actions" align="end">
+    <button mat-icon-button color="primary" (click)="saveChanges()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" (click)="cancel()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
