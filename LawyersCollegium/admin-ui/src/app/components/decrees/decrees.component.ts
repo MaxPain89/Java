@@ -119,6 +119,7 @@ export interface Decree {
   date: string,
   accused: string,
   lawyerId: number,
+  lawyer: String,
   amount: number,
   payDate: string
 }

@@ -109,13 +109,12 @@ public class Decree extends ConfigurableFetchMode {
     }
 
     public WireDecree toWire(){
-        Collegium collegium = this.lawyer != null ? this.lawyer.getCollegium() : null;
         return new WireDecree(
                 this.id,
                 DateParser.dateToStr(this.date),
                 this.accused,
                 this.lawyer != null ? lawyer.getId() : null,
-                collegium != null ? collegium.getName() : null,
+                this.lawyer != null ? lawyer.getFullName() : null,
                 this.amount,
                 DateParser.dateToStr(this.payDate));
     }

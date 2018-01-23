@@ -9,7 +9,7 @@ public class WireDecree {
     private String date;
     private String accused;
     private Long lawyerId;
-    private String collegium;
+    private String lawyer;
     private float amount;
     private String payDate;
 
@@ -18,14 +18,14 @@ public class WireDecree {
                       @JsonProperty("date") String date,
                       @JsonProperty("accused") String accused,
                       @JsonProperty("lawyerId") Long lawyerId,
-                      @JsonProperty("collegium") String collegium,
+                      @JsonProperty("lawyer") String lawyer,
                       @JsonProperty("amount") float amount,
                       @JsonProperty("payDate") String payDate) {
         this.id = id;
         this.date = date;
         this.accused = accused;
         this.lawyerId = lawyerId;
-        this.collegium = collegium;
+        this.lawyer = lawyer;
         this.amount = amount;
         this.payDate = payDate;
     }
@@ -78,9 +78,11 @@ public class WireDecree {
         this.lawyerId = lawyerId;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s| %-15s| %-35s| %-60s| %-10s| %s",
-                date, accused, lawyerId, collegium, amount, payDate);
+    public String getLawyer() {
+        return lawyer;
+    }
+
+    public void setLawyer(String lawyer) {
+        this.lawyer = lawyer;
     }
 }
