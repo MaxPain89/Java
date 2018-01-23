@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {CollegiumService} from "../../services/collegium.service";
 
 @Component({
   selector: 'app-collegiums',
@@ -7,12 +9,36 @@ import {Component, OnInit} from '@angular/core';
 })
 export class CollegiumsComponent implements OnInit {
 
-  constructor() {
+  dataSource = new MatTableDataSource();
+  collegiums:Collegium[];
+  displayedColumns;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  constructor(private collegiumService: CollegiumService) {
   }
 
   ngOnInit() {
+    this.displayedColumns = ['name', 'other', 'buttons'];
+    this.getCollegiums();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  getCollegiums() {
+    this.collegiumService.getCollegiums().subscribe(collegiumResp => {
+      this.collegiums = collegiumResp;
+      this.dataSource.data = this.collegiums;
+    })
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
 }
 
 export interface Collegium {
