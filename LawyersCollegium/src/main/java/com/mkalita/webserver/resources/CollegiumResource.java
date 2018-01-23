@@ -32,7 +32,7 @@ public class CollegiumResource {
         return collegiumController.createCollegium(wireCollegium);
     }
 
-    @RequestMapping(value = "/collegium/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/collegium/{id}", method = RequestMethod.PUT)
     public @ResponseBody
     WireCollegium updateCollegium(@PathVariable Long id,
                                   @RequestBody WireCollegium wireCollegium) {
