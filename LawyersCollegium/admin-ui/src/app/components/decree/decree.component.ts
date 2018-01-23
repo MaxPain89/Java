@@ -43,7 +43,7 @@ export class DecreeComponent implements OnInit {
   }
 
   getLawyersMap() {
-    this.lawyerService.getLawyers().subscribe(lawyersResp => {
+    this.lawyerService.getLawyers(null).subscribe(lawyersResp => {
       let lawyersMap = {};
       lawyersResp.forEach(function (lawyer) {
         lawyersMap[lawyer.id] = lawyer;

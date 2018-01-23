@@ -1,0 +1,15 @@
+.lawyer-card {
+  margin-top: 5px;
+  width: 350px;
+}
+
+.lawyer-card-actions {
+}
+
+.lawyer-card-field {
+  width: 320px;
+}
+
+.hidden {
+  visibility: hidden;
+}

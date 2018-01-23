@@ -75,8 +75,9 @@ public class Lawyer extends ConfigurableFetchMode{
     public WireLawyer toWire(){
         return new WireLawyer(this.id,
                 this.collegium != null ? collegium.getId() : null,
+                this.collegium != null ? collegium.getName() : null,
                 this.fullName,
-                              this.isOut());
+                this.isOut());
     }
 
     public void updateFromWire(WireLawyer wireLawyer) {

@@ -1,11 +1,3 @@
-<mat-form-field>
-  <mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">
-    <mat-option [value]=-1>Все</mat-option>
-    <mat-option *ngFor="let item of collegiums" [value]="item.id">
-      {{item.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
 <div class="example-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Фильтр">
@@ -13,19 +5,13 @@
 </div>
 <div class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="fullName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> ФИО</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.fullName}}</mat-cell>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Название</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="collegiumName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Коллегия</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.collegiumName}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="out">
-      <mat-header-cell *matHeaderCellDef> Выбыл </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-icon *ngIf="element.out" color="primary">warning</mat-icon>
-      </mat-cell>
+    <ng-container matColumnDef="other">
+      <mat-header-cell *matHeaderCellDef> Доп. инфо</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.other}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="buttons">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
