@@ -48,7 +48,7 @@
     </ng-container>
     <ng-container matColumnDef="lawyer">
       <mat-header-cell *matHeaderCellDef> Адвокат</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.lawyerId?lawyersMap[element.lawyerId].fullName : null}}</mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.lawyer}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="amount">
       <mat-header-cell *matHeaderCellDef> Сумма</mat-header-cell>
