@@ -5,7 +5,6 @@ import {DateAdapter} from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Moment} from "moment";
 import {Router} from "@angular/router";
-import {LawyerService} from "../../services/lawyer.service";
 
 @Component({
   selector: 'app-decrees',
@@ -30,14 +29,13 @@ export class DecreesComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private decreeService: DecreeService,
-              private lawyerService: LawyerService,
               private adapter: DateAdapter<any>,
               private router: Router) {
   }
 
   ngOnInit() {
     this.year = this.currentYear;
-    this.getLawyersMap();
+    this.getDecrees();
     this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
   }
 
@@ -57,17 +55,6 @@ export class DecreesComponent implements OnInit {
     this.decreeService.getDecreesByYear(this.year).subscribe(decreesResp => {
       this.decrees = decreesResp;
       this.dataSource.data = this.decrees;
-    })
-  }
-
-  getLawyersMap() {
-    this.lawyerService.getLawyers().subscribe(lawyersResp => {
-      let lawyersMap = {};
-      lawyersResp.forEach(function (lawyer) {
-        lawyersMap[lawyer.id] = lawyer;
-      });
-      this.lawyersMap = lawyersMap;
-      this.getDecrees();
     })
   }
 
