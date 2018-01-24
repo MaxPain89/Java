@@ -43,35 +43,54 @@ public class CollegiumController {
     }
 
     public WireCollegium createCollegium(WireCollegium wireCollegium) {
-        em.getTransaction().begin();
-        Collegium collegium = new Collegium(wireCollegium);
-        em.persist(collegium);
-        em.getTransaction().commit();
-        return collegium.toWire();
+        try {
+            em.getTransaction().begin();
+            Collegium collegium = new Collegium(wireCollegium);
+            em.persist(collegium);
+            em.getTransaction().commit();
+            return collegium.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
     }
 
     public WireCollegium updateCollegium(WireCollegium updatedCollegium, long collegiumId) {
-        em.getTransaction().begin();
-        Collegium collegium = _getCollegium(collegiumId);
-        collegium.updateFromWire(updatedCollegium);
-        em.merge(collegium);
-        em.getTransaction().commit();
-        return getCollegium(collegiumId);
+        try {
+            em.getTransaction().begin();
+            Collegium collegium = _getCollegium(collegiumId);
+            collegium.updateFromWire(updatedCollegium);
+            em.merge(collegium);
+            em.getTransaction().commit();
+            return getCollegium(collegiumId);
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
     }
 
     public WireCollegium deleteCollegium(long collegiumId, boolean force) {
-        em.getTransaction().begin();
-        Collegium collegium = _getCollegium(collegiumId);
-        Set<Lawyer> lawyers = collegium.getLawyers();
-        if (lawyers.size() > 0) {
-            if (!force) {
-                throw new ForbiddenException("Can't delete collegium with lawyers");
-            } else {
-                lawyers.forEach(lawyer -> em.remove(lawyer));
+        try {
+            em.getTransaction().begin();
+            Collegium collegium = null;
+            collegium = _getCollegium(collegiumId);
+            Set<Lawyer> lawyers = collegium.getLawyers();
+            if (lawyers.size() > 0) {
+                if (!force) {
+                    throw new ForbiddenException("Can't delete collegium with lawyers");
+                } else {
+                    lawyers.forEach(lawyer -> em.remove(lawyer));
+                }
+            }
+            em.remove(collegium);
+            em.getTransaction().commit();
+            return collegium.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
         }
-        em.remove(collegium);
-        em.getTransaction().commit();
-        return collegium.toWire();
     }
 }

@@ -58,47 +58,65 @@ public class LawyerController {
     }
 
     public WireLawyer createLawyer(WireLawyer wireLawyer, Long collegiumId) {
-        em.getTransaction().begin();
-        Collegium collegium = null;
-        if (collegiumId != null) {
-            collegium = collegiumController._getCollegium(collegiumId);
+        try {
+            em.getTransaction().begin();
+            Collegium collegium = null;
+            if (collegiumId != null) {
+                collegium = collegiumController._getCollegium(collegiumId);
+            }
+            Lawyer lawyer = new Lawyer(wireLawyer, collegium);
+            em.persist(lawyer);
+            em.getTransaction().commit();
+            return lawyer.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        Lawyer lawyer = new Lawyer(wireLawyer, collegium);
-        em.persist(lawyer);
-        em.getTransaction().commit();
-        return lawyer.toWire();
     }
 
     public WireLawyer updateLawyer(WireLawyer updatedLawyer, long lawyerId, Long collegiumId) {
-        em.getTransaction().begin();
-        Lawyer lawyer = _getLawyer(lawyerId);
-        Collegium newCollegium = null;
-        if (collegiumId != null) {
-            newCollegium = collegiumController._getCollegium(collegiumId);
+        try {
+            em.getTransaction().begin();
+            Lawyer lawyer = _getLawyer(lawyerId);
+            Collegium newCollegium = null;
+            if (collegiumId != null) {
+                newCollegium = collegiumController._getCollegium(collegiumId);
+            }
+            Collegium collegium = lawyer.getCollegium();
+            lawyer.updateFromWire(updatedLawyer);
+            if (!Objects.equals(collegium, newCollegium)) {
+                lawyer.setCollegium(newCollegium);
+            }
+            em.merge(lawyer);
+            em.getTransaction().commit();
+            return getLawyer(lawyerId);
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        Collegium collegium = lawyer.getCollegium();
-        lawyer.updateFromWire(updatedLawyer);
-        if (!Objects.equals(collegium, newCollegium)) {
-            lawyer.setCollegium(newCollegium);
-        }
-        em.merge(lawyer);
-        em.getTransaction().commit();
-        return getLawyer(lawyerId);
     }
 
     public WireLawyer deleteLawyer(long lawyerId, boolean force, boolean deleteDecrees) {
-        em.getTransaction().begin();
-        Lawyer lawyer = _getLawyer(lawyerId);
-        if (lawyer.getDecrees().size() > 0 && !force) {
-            throw new ForbiddenException("Can't delete lawyers with decrees.");
+        try {
+            em.getTransaction().begin();
+            Lawyer lawyer = _getLawyer(lawyerId);
+            if (lawyer.getDecrees().size() > 0 && !force) {
+                throw new ForbiddenException("Can't delete lawyers with decrees.");
+            }
+            if (deleteDecrees) {
+                lawyer.getDecrees().forEach(decree -> decree.setLawyer(null));
+            } else {
+                lawyer.getDecrees().forEach(decree -> em.remove(decree));
+            }
+            em.remove(lawyer);
+            em.getTransaction().commit();
+            return lawyer.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        if (deleteDecrees) {
-            lawyer.getDecrees().forEach(decree -> decree.setLawyer(null));
-        } else {
-            lawyer.getDecrees().forEach(decree -> em.remove(decree));
-        }
-        em.remove(lawyer);
-        em.getTransaction().commit();
-        return lawyer.toWire();
     }
 }
