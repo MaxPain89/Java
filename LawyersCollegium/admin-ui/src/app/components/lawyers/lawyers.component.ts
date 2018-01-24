@@ -56,7 +56,9 @@ export class LawyersComponent implements OnInit {
   }
 
   deleteButton(id: number) {
-    console.log('delete ' + id);
+    this.lawyerService.deleteLawyer(id).subscribe(resp => {
+      this.getLawyers();
+    });
   }
 
   editButton(id: number) {

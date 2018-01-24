@@ -3,6 +3,7 @@ package com.mkalita.controllers;
 import com.mkalita.jpa.Collegium;
 import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.JPAUtil;
+import com.mkalita.webserver.exceptions.ForbiddenException;
 import com.mkalita.webserver.exceptions.NotFoundException;
 import com.mkalita.wire.WireLawyer;
 import org.slf4j.Logger;
@@ -85,4 +86,19 @@ public class LawyerController {
         return getLawyer(lawyerId);
     }
 
+    public WireLawyer deleteLawyer(long lawyerId, boolean force, boolean deleteDecrees) {
+        em.getTransaction().begin();
+        Lawyer lawyer = _getLawyer(lawyerId);
+        if (lawyer.getDecrees().size() > 0 && !force) {
+            throw new ForbiddenException("Can't delete lawyers with decrees.");
+        }
+        if (deleteDecrees) {
+            lawyer.getDecrees().forEach(decree -> decree.setLawyer(null));
+        } else {
+            lawyer.getDecrees().forEach(decree -> em.remove(decree));
+        }
+        em.remove(lawyer);
+        em.getTransaction().commit();
+        return lawyer.toWire();
+    }
 }

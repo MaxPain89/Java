@@ -93,7 +93,9 @@ export class DecreesComponent implements OnInit {
   }
 
   deleteButton(id: number) {
-    console.log('delete ' + id);
+    this.decreeService.deleteDecree(id).subscribe(resp => {
+      this.getDecrees();
+    });
   }
 
   editButton(id: number) {

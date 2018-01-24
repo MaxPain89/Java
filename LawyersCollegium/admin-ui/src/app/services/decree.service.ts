@@ -46,4 +46,7 @@ export class DecreeService {
     return this.http.put(this.decreePath + id + params, decree, {headers: this.headers});
   }
 
+  deleteDecree(id: number): Observable<any> {
+    return this.http.delete(this.decreePath + id, {headers: this.headers})
+  }
 }

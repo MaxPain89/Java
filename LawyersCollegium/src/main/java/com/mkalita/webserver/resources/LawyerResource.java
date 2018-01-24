@@ -44,4 +44,12 @@ public class LawyerResource {
                             @RequestBody WireLawyer wireLawyer) {
         return lawyerController.updateLawyer(wireLawyer, id, collegiumId);
     }
+
+    @RequestMapping(value = "/lawyer/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    WireLawyer deleteLawyer(@PathVariable Long id,
+                            @RequestParam(defaultValue = "false") Boolean force,
+                            @RequestParam(defaultValue = "false") Boolean deleteDecrees) {
+        return lawyerController.deleteLawyer(id, force, deleteDecrees);
+    }
 }

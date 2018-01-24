@@ -38,4 +38,11 @@ public class CollegiumResource {
                                   @RequestBody WireCollegium wireCollegium) {
         return collegiumController.updateCollegium(wireCollegium, id);
     }
+
+    @RequestMapping(value = "/collegium/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    WireCollegium deleteCollegium(@PathVariable Long id,
+                                  @RequestParam(defaultValue = "false") Boolean force) {
+        return collegiumController.deleteCollegium(id, force);
+    }
 }

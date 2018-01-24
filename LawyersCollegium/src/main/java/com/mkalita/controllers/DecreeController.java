@@ -106,4 +106,12 @@ public class DecreeController {
         em.getTransaction().commit();
         return getDecree(decreeId);
     }
+
+    public WireDecree deleteDecree(long decreeId) {
+        em.getTransaction().begin();
+        Decree decree = _getDecree(decreeId);
+        em.remove(decree);
+        em.getTransaction().commit();
+        return decree.toWire();
+    }
 }

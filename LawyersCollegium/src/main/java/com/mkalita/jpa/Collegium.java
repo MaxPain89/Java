@@ -3,6 +3,8 @@ package com.mkalita.jpa;
 import com.mkalita.wire.WireCollegium;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 @Entity
@@ -11,6 +13,7 @@ public class Collegium {
     private long id;
     private String name;
     private String other;
+    private Set<Lawyer> lawyers;
 
     public Collegium() {
     }
@@ -49,6 +52,15 @@ public class Collegium {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+    @OneToMany(mappedBy = "collegium")
+    public Set<Lawyer> getLawyers() {
+        return lawyers;
+    }
+
+    public void setLawyers(Set<Lawyer> lawyers) {
+        this.lawyers = lawyers;
     }
 
     @Override

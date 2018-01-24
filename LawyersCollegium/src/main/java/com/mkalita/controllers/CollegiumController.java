@@ -1,7 +1,9 @@
 package com.mkalita.controllers;
 
 import com.mkalita.jpa.Collegium;
+import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.JPAUtil;
+import com.mkalita.webserver.exceptions.ForbiddenException;
 import com.mkalita.webserver.exceptions.NotFoundException;
 import com.mkalita.wire.WireCollegium;
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,5 +57,21 @@ public class CollegiumController {
         em.merge(collegium);
         em.getTransaction().commit();
         return getCollegium(collegiumId);
+    }
+
+    public WireCollegium deleteCollegium(long collegiumId, boolean force) {
+        em.getTransaction().begin();
+        Collegium collegium = _getCollegium(collegiumId);
+        Set<Lawyer> lawyers = collegium.getLawyers();
+        if (lawyers.size() > 0) {
+            if (!force) {
+                throw new ForbiddenException("Can't delete collegium with lawyers");
+            } else {
+                lawyers.forEach(lawyer -> em.remove(lawyer));
+            }
+        }
+        em.remove(collegium);
+        em.getTransaction().commit();
+        return collegium.toWire();
     }
 }

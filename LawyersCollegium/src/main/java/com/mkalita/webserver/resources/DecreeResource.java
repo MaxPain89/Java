@@ -54,6 +54,13 @@ public class DecreeResource {
         return decreeController.updateDecree(id, wireDecree, lawyerId);
     }
 
+    @RequestMapping(value = "/decree/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    WireDecree deleteDecree(@PathVariable Long id) {
+        return decreeController.deleteDecree(id);
+    }
+
+
     private Date getDate(String date) {
         Date result;
         if (date != null) {

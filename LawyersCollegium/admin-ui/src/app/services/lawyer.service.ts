@@ -43,4 +43,8 @@ export class LawyerService {
     }
     return this.http.put(this.lawyerPath + id + params, lawyer, {headers: this.headers});
   }
+
+  deleteLawyer(id: number): Observable<any> {
+    return this.http.delete(this.lawyerPath + id, {headers: this.headers})
+  }
 }
