@@ -52,6 +52,10 @@ export class CollegiumsComponent implements OnInit {
     this.router.navigate(['/collegium/' + id]);
   }
 
+  addButton() {
+    this.router.navigate(['/collegium/' + 0]);
+  }
+
 }
 
 export interface Collegium {

@@ -101,6 +101,10 @@ export class DecreesComponent implements OnInit {
   editButton(id: number) {
     this.router.navigate(['/decree/' + id]);
   }
+
+  addButton() {
+    this.router.navigate(['/decree/' + 0]);
+  }
 }
 
 export interface Decree {

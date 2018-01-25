@@ -16,7 +16,7 @@
     <div>
       <mat-form-field class="decree-card-field">
         <mat-select placeholder="Выберете адвоката" [(value)]="currentLawyerId" (change)="onChangeLawyer($event)">
-          <mat-option value=null>--</mat-option>
+          <mat-option value=0>--</mat-option>
           <mat-option *ngFor="let key of getLawyersMapKeys()" [value]="key">
             {{lawyersMap[key].fullName}}
           </mat-option>

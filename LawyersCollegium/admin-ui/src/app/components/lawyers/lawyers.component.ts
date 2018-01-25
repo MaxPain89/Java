@@ -73,6 +73,10 @@ export class LawyersComponent implements OnInit {
     }
     this.getLawyers();
   }
+
+  addButton() {
+    this.router.navigate(['/lawyer/' + 0]);
+  }
 }
 
 export interface Lawyer {

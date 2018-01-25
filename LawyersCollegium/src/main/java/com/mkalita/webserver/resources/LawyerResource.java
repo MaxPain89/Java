@@ -32,7 +32,7 @@ public class LawyerResource {
 
     @RequestMapping(value = "/lawyers", method = RequestMethod.POST)
     public @ResponseBody
-    WireLawyer createLawyer(@RequestParam(required = false) Long collegiumId,
+    WireLawyer createLawyer(@RequestParam Long collegiumId,
                             @RequestBody WireLawyer wireLawyer) {
         return lawyerController.createLawyer(wireLawyer, collegiumId);
     }

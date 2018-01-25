@@ -22,6 +22,7 @@ public class Lawyer extends ConfigurableFetchMode{
     public Lawyer(WireLawyer wirelawyer, Collegium collegium) {
         this.fullName = wirelawyer.getFullName();
         this.out = wirelawyer.isOut();
+        this.collegium = collegium;
     }
 
     public Lawyer() {

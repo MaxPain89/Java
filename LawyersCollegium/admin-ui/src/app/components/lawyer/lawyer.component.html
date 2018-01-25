@@ -8,7 +8,7 @@
     <div>
       <mat-form-field class="lawyer-card-field">
         <mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">
-          <mat-option value=null>--</mat-option>
+          <mat-option value=0>--</mat-option>
           <mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">
             {{collegiumsMaps[key].name}}
           </mat-option>

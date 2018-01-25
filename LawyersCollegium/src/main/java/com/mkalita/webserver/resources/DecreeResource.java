@@ -35,7 +35,7 @@ public class DecreeResource {
 
     @RequestMapping(value = "/decrees", method = RequestMethod.POST)
     public @ResponseBody
-    WireDecree createDecree(@RequestParam Long lawyerId,
+    WireDecree createDecree(@RequestParam(required = false) Long lawyerId,
                             @RequestBody WireDecree wireDecree) {
         return decreeController.createDecree(wireDecree, lawyerId);
     }
