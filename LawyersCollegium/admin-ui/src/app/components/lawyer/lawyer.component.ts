@@ -13,14 +13,23 @@ export class LawyerComponent implements OnInit {
 
   collegiumsMaps = {};
   currentLawyer: Lawyer = <Lawyer>{};
-  currentCollegiumId:number=1;
+  currentCollegiumId:number=0;
   lawyerId:number=43192;
   constructor(private collegiumService: CollegiumService,
               private lawyerService: LawyerService,
               private route: ActivatedRoute,
               private router: Router) {
-    this.route.params.subscribe( params => this.lawyerId = params['id']);
-    this.getLawyer();
+    this.route.params.subscribe( params => {
+      this.lawyerId = params['id']
+      if (this.lawyerId == 0) {
+        this.currentCollegiumId = 0;
+        this.currentLawyer.out = false;
+        this.getCollegiumMap();
+      } else {
+        this.getLawyer();
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -50,9 +59,15 @@ export class LawyerComponent implements OnInit {
   }
 
   saveChanges() {
-    this.lawyerService.updateLawyer(this.currentLawyer.id, this.currentLawyer, this.currentCollegiumId).subscribe(resp => {
-      this.router.navigate(['/lawyers']);
-    })
+    if (this.lawyerId == 0) {
+      this.lawyerService.createLawyer(this.currentLawyer, this.currentCollegiumId == 0 ? null : this.currentCollegiumId).subscribe(resp => {
+        this.router.navigate(['/lawyers']);
+      })
+    } else {
+      this.lawyerService.updateLawyer(this.currentLawyer.id, this.currentLawyer, this.currentCollegiumId).subscribe(resp => {
+        this.router.navigate(['/lawyers']);
+      })
+    }
   }
 
   cancel() {

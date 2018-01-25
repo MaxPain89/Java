@@ -30,17 +30,23 @@ export class LawyerService {
     return this.http.get(this.lawyersPath + params);
   }
 
-  // noinspection JSUnusedGlobalSymbols
-  createLawyer(lawyer: Lawyer): Observable<any> {
-    return this.http.post(this.lawyersPath, lawyer, {headers: this.headers});
+  createLawyer(lawyer: Lawyer, collegiumId: number): Observable<any> {
+    let params: string = "";
+    if (collegiumId > 0) {
+      params = "?collegiumId=" + collegiumId;
+    }
+    return this.http.post(this.lawyersPath + params, lawyer, {headers: this.headers});
   }
 
-  // noinspection JSUnusedGlobalSymbols
   updateLawyer(id: number, lawyer: Lawyer, collegiumId: number): Observable<any> {
     let params: string = "";
     if (collegiumId > 0) {
       params = "?collegiumId=" + collegiumId;
     }
     return this.http.put(this.lawyerPath + id + params, lawyer, {headers: this.headers});
+  }
+
+  deleteLawyer(id: number): Observable<any> {
+    return this.http.delete(this.lawyerPath + id, {headers: this.headers})
   }
 }

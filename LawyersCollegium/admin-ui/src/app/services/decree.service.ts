@@ -34,8 +34,12 @@ export class DecreeService {
   }
 
   // noinspection JSUnusedGlobalSymbols
-  createDecree(decree: Decree):Observable<any> {
-    return this.http.post(this.decreesPath, decree, { headers: this.headers });
+  createDecree(decree: Decree, lawyerId: number):Observable<any> {
+    let params: string = "";
+    if (lawyerId) {
+      params = "?lawyerId=" + lawyerId;
+    }
+    return this.http.post(this.decreesPath + params, decree, { headers: this.headers });
   }
 
   updateDecree(id: number, decree: Decree, lawyerId: number): Observable<any> {
@@ -46,4 +50,7 @@ export class DecreeService {
     return this.http.put(this.decreePath + id + params, decree, {headers: this.headers});
   }
 
+  deleteDecree(id: number): Observable<any> {
+    return this.http.delete(this.decreePath + id, {headers: this.headers})
+  }
 }

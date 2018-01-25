@@ -41,8 +41,13 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <mat-paginator #paginator
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20]">
-  </mat-paginator>
+  <div class="inline-flex">
+    <button class="add-button" mat-fab color="primary" (click)="addButton()">
+      <mat-icon>person_add</mat-icon>
+    </button>
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
 </div>

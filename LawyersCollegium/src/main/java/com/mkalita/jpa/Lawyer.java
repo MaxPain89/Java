@@ -7,6 +7,7 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import javax.persistence.criteria.FetchParent;
 import javax.persistence.criteria.JoinType;
+import java.util.Set;
 
 @SuppressWarnings({"JpaDataSourceORMInspection", "unused"})
 @Entity
@@ -16,10 +17,12 @@ public class Lawyer extends ConfigurableFetchMode{
     private String fullName;
     private Collegium collegium;
     private boolean out;
+    private Set<Decree> decrees;
 
     public Lawyer(WireLawyer wirelawyer, Collegium collegium) {
         this.fullName = wirelawyer.getFullName();
         this.out = wirelawyer.isOut();
+        this.collegium = collegium;
     }
 
     public Lawyer() {
@@ -65,6 +68,15 @@ public class Lawyer extends ConfigurableFetchMode{
 
     public void setOut(boolean out) {
         this.out = out;
+    }
+
+    @OneToMany(mappedBy = "lawyer")
+    public Set<Decree> getDecrees() {
+        return decrees;
+    }
+
+    public void setDecrees(Set<Decree> decrees) {
+        this.decrees = decrees;
     }
 
     @Override

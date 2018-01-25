@@ -35,5 +35,8 @@ export class CollegiumService {
     return this.http.put(this.collegiumPath + id, collegium, {headers: this.headers});
   }
 
+  deleteCollegium(id: number): Observable<any> {
+    return this.http.delete(this.collegiumPath + id, {headers: this.headers})
+  }
 
 }

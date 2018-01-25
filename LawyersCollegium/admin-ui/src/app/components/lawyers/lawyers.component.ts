@@ -56,7 +56,9 @@ export class LawyersComponent implements OnInit {
   }
 
   deleteButton(id: number) {
-    console.log('delete ' + id);
+    this.lawyerService.deleteLawyer(id).subscribe(resp => {
+      this.getLawyers();
+    });
   }
 
   editButton(id: number) {
@@ -70,6 +72,10 @@ export class LawyersComponent implements OnInit {
       this.currentCollegiumId = -1;
     }
     this.getLawyers();
+  }
+
+  addButton() {
+    this.router.navigate(['/lawyer/' + 0]);
   }
 }
 

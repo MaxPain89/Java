@@ -35,7 +35,7 @@ public class DecreeResource {
 
     @RequestMapping(value = "/decrees", method = RequestMethod.POST)
     public @ResponseBody
-    WireDecree createDecree(@RequestParam Long lawyerId,
+    WireDecree createDecree(@RequestParam(required = false) Long lawyerId,
                             @RequestBody WireDecree wireDecree) {
         return decreeController.createDecree(wireDecree, lawyerId);
     }
@@ -53,6 +53,13 @@ public class DecreeResource {
                             @RequestBody WireDecree wireDecree) {
         return decreeController.updateDecree(id, wireDecree, lawyerId);
     }
+
+    @RequestMapping(value = "/decree/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    WireDecree deleteDecree(@PathVariable Long id) {
+        return decreeController.deleteDecree(id);
+    }
+
 
     private Date getDate(String date) {
         Date result;

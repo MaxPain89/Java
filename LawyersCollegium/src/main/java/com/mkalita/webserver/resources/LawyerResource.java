@@ -32,7 +32,7 @@ public class LawyerResource {
 
     @RequestMapping(value = "/lawyers", method = RequestMethod.POST)
     public @ResponseBody
-    WireLawyer createLawyer(@RequestParam(required = false) Long collegiumId,
+    WireLawyer createLawyer(@RequestParam Long collegiumId,
                             @RequestBody WireLawyer wireLawyer) {
         return lawyerController.createLawyer(wireLawyer, collegiumId);
     }
@@ -43,5 +43,13 @@ public class LawyerResource {
                             @RequestParam(required = false) Long collegiumId,
                             @RequestBody WireLawyer wireLawyer) {
         return lawyerController.updateLawyer(wireLawyer, id, collegiumId);
+    }
+
+    @RequestMapping(value = "/lawyer/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    WireLawyer deleteLawyer(@PathVariable Long id,
+                            @RequestParam(defaultValue = "false") Boolean force,
+                            @RequestParam(defaultValue = "false") Boolean deleteDecrees) {
+        return lawyerController.deleteLawyer(id, force, deleteDecrees);
     }
 }

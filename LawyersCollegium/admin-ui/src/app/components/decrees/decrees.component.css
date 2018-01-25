@@ -6,3 +6,13 @@
 .mat-header-cell.mat-sort-header-sorted {
   color: black;
 }
+
+.inline-flex {
+  display:inline-flex;
+  width: 100%;
+
+}
+
+.add-button {
+  margin: 5px 10px;
+}

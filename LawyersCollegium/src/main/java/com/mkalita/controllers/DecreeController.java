@@ -78,32 +78,58 @@ public class DecreeController {
     }
 
     public WireDecree createDecree(WireDecree wireDecree, Long lawyerId) {
-        em.getTransaction().begin();
-        Decree decree = new Decree(wireDecree);
-        Lawyer lawyer = null;
-        if (lawyerId != null) {
-            lawyer = lawyerController._getLawyer(lawyerId);
+        try {
+            em.getTransaction().begin();
+            Decree decree = new Decree(wireDecree);
+            Lawyer lawyer = null;
+            if (lawyerId != null) {
+                lawyer = lawyerController._getLawyer(lawyerId);
+            }
+            decree.setLawyer(lawyer);
+            em.persist(decree);
+            em.getTransaction().commit();
+            return decree.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        decree.setLawyer(lawyer);
-        em.persist(decree);
-        em.getTransaction().commit();
-        return decree.toWire();
     }
 
     public WireDecree updateDecree(Long decreeId, WireDecree wireDecree, Long lawyerId) {
-        em.getTransaction().begin();
-        Decree decree = _getDecree(decreeId);
-        Lawyer newLawyer = null;
-        if (lawyerId != null) {
-            newLawyer = lawyerController._getLawyer(lawyerId);
+        try {
+            em.getTransaction().begin();
+            Decree decree = _getDecree(decreeId);
+            Lawyer newLawyer = null;
+            if (lawyerId != null) {
+                newLawyer = lawyerController._getLawyer(lawyerId);
+            }
+            Lawyer lawyer = decree.getLawyer();
+            if (!Objects.equals(lawyer, newLawyer)) {
+                decree.setLawyer(newLawyer);
+            }
+            decree.updateFromWire(wireDecree);
+            em.merge(decree);
+            em.getTransaction().commit();
+            return getDecree(decreeId);
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        Lawyer lawyer = decree.getLawyer();
-        if (!Objects.equals(lawyer, newLawyer)) {
-            decree.setLawyer(newLawyer);
+    }
+
+    public WireDecree deleteDecree(long decreeId) {
+        try {
+            em.getTransaction().begin();
+            Decree decree = _getDecree(decreeId);
+            em.remove(decree);
+            em.getTransaction().commit();
+            return decree.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         }
-        decree.updateFromWire(wireDecree);
-        em.merge(decree);
-        em.getTransaction().commit();
-        return getDecree(decreeId);
     }
 }

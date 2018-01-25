@@ -12,12 +12,18 @@ import {LawyerService} from "../../services/lawyer.service";
 export class CollegiumComponent implements OnInit {
 
   currentCollegium: Collegium = <Collegium>{};
-  currentCollegiumId:number=1;
+  currentCollegiumId:number=0;
   constructor(private collegiumService: CollegiumService,
               private route: ActivatedRoute,
               private router: Router) {
-    this.route.params.subscribe( params => this.currentCollegiumId = params['id']);
-    this.getCollegium();
+    this.route.params.subscribe( params => {
+      this.currentCollegiumId = params['id']
+      if (this.currentCollegiumId == 0) {
+
+      } else {
+        this.getCollegium();
+      }
+    });
   }
 
   ngOnInit() {
@@ -31,9 +37,15 @@ export class CollegiumComponent implements OnInit {
   }
 
   saveChanges() {
-    this.collegiumService.updateCollegium(this.currentCollegiumId, this.currentCollegium).subscribe(resp => {
-      this.router.navigate(['/collegiums']);
-    })
+    if (this.currentCollegiumId == 0) {
+      this.collegiumService.createCollegium(this.currentCollegium).subscribe(resp => {
+        this.router.navigate(['/collegiums']);
+      })
+    } else {
+      this.collegiumService.updateCollegium(this.currentCollegiumId, this.currentCollegium).subscribe(resp => {
+        this.router.navigate(['/collegiums']);
+      })
+    }
   }
 
   cancel() {

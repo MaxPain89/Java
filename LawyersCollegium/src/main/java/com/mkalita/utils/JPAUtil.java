@@ -18,6 +18,7 @@ public class JPAUtil {
             final Object idValue,
             final Class<T> aClass) {
         try {
+            em.clear();
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
             CriteriaQuery<T> query = cb.createQuery(aClass);
@@ -54,6 +55,7 @@ public class JPAUtil {
             final JPASortParams sortParams,
             final Class<T> aClass) {
         try {
+            em.clear();
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
             CriteriaQuery<T> query = cb.createQuery(aClass);

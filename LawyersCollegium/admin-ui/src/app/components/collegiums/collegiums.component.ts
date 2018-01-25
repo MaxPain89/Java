@@ -43,11 +43,17 @@ export class CollegiumsComponent implements OnInit {
   }
 
   deleteButton(id: number) {
-    console.log('delete ' + id);
+    this.collegiumService.deleteCollegium(id).subscribe(resp => {
+      this.getCollegiums();
+    });
   }
 
   editButton(id: number) {
     this.router.navigate(['/collegium/' + id]);
+  }
+
+  addButton() {
+    this.router.navigate(['/collegium/' + 0]);
   }
 
 }
