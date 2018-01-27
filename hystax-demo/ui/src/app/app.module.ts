@@ -23,6 +23,9 @@ import {BookService} from "./services/book.service";
 import {BookComponent} from './components/book/book.component';
 
 const appRoutes: Routes = [
+  {path: "",
+      redirectTo: "/books",
+      pathMatch: 'full'},
   {path: "books", component: BooksComponent},
   {path: "book/:id", component: BookComponent}
 ];
