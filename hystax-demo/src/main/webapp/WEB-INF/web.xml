@@ -11,6 +11,16 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<filter>
+		<filter-name>cors</filter-name>
+		<filter-class>com.hystax.demo.filters.SimpleCorsFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>cors</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 	<servlet-mapping>
 		<servlet-name>rest</servlet-name>
 		<url-pattern>/rest/*</url-pattern>

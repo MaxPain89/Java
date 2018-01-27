@@ -13,6 +13,7 @@
 		<dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
 		<dep.hibernate.core.version>5.1.11.Final</dep.hibernate.core.version>
 		<jackson.version>2.4.4</jackson.version>
+		<servletapi.version>3.0.1</servletapi.version>
 	</properties>
 	
 	<dependencies>
@@ -42,20 +43,12 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
-		<!--&lt;!&ndash; JSTL &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>javax.servlet</groupId>-->
-			<!--<artifactId>jstl</artifactId>-->
-			<!--<version>${jstl.version}</version>-->
-		<!--</dependency>-->
-
-		<!--&lt;!&ndash; for compile only, your container should have this &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>javax.servlet</groupId>-->
-			<!--<artifactId>servlet-api</artifactId>-->
-			<!--<version>${servletapi.version}</version>-->
-			<!--<scope>provided</scope>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servletapi.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!--hibernate-->
 		<dependency>
