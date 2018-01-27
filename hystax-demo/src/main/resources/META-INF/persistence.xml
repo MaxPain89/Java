@@ -3,5 +3,8 @@
     <persistence-unit name="OracleJPA">
         <jta-data-source>oracle_jdbi</jta-data-source>
         <class>com.hystax.demo.jpa.Phonebook</class>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+        </properties>
     </persistence-unit>
 </persistence>

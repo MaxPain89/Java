@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@RestController
 @Component
 public class PhoneBookController {
 
@@ -33,30 +32,64 @@ public class PhoneBookController {
         this.em = em;
     }
 
-//    @RequestMapping(value = "/books", method = RequestMethod.GET)
-//    public @ResponseBody
-//    List<Book> getCollegiums() throws NamingException, SQLException {
-//        List<Book> books = new ArrayList<Book>();
-//        Context ctx = new InitialContext();
-//        DataSource ds = (DataSource)ctx.lookup("oracle_jdbi");
-//        Connection con = ds.getConnection();
-//        Statement st = con.createStatement();
-//        ResultSet rs = st.executeQuery("SELECT * from PHONEBOOK");
-//        while (rs.next()) {
-//            books.add(Converter.convertToBook(rs));
-//        }
-////        books.add(new Book(1L, "1", "2", "213",  2L));
-//        return books;
-//    }
-
-    @RequestMapping(value = "/books", method = RequestMethod.GET)
-    public @ResponseBody
-    List<WireBook> getBooks() {
+    public List<WireBook> getBooks() {
         List<Phonebook> books = JPAUtil.getObjects(em, Collections.<String, Object>emptyMap(), null, Phonebook.class);
         List<WireBook> wireBooks = new ArrayList<WireBook>();
         for (Phonebook book : books) {
             wireBooks.add(book.toWire());
         }
         return wireBooks;
+    }
+
+    public WireBook getBook(Long id) {
+        return _getBook(id).toWire();
+    }
+
+    private Phonebook _getBook(Long id) {
+        Phonebook book = JPAUtil.getObject(em, "id", id, Phonebook.class);
+        return book;
+    }
+
+    public WireBook addBook(WireBook wireBook) {
+        try {
+            em.getTransaction().begin();
+            Phonebook book = new Phonebook(wireBook);
+            em.persist(book);
+            em.getTransaction().commit();
+            return book.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
+    }
+
+    public WireBook updateBook(Long id, WireBook wireBook) {
+        try {
+            em.getTransaction().begin();
+            Phonebook book = _getBook(id);
+            book.updateFromWire(wireBook);
+            em.merge(book);
+            em.getTransaction().commit();
+            return getBook(id);
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
+    }
+
+    public WireBook removeBook(Long id) {
+        try {
+            em.getTransaction().begin();
+            Phonebook book = _getBook(id);
+            em.remove(book);
+            em.getTransaction().commit();
+            return book.toWire();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
     }
 }

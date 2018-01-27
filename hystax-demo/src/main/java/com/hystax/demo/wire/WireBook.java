@@ -11,11 +11,11 @@ public class WireBook {
     private Long idNumber;
 
     @JsonCreator
-    public WireBook(@JsonProperty Long id,
-                @JsonProperty String fullName,
-                @JsonProperty String address,
-                @JsonProperty String phone,
-                @JsonProperty Long idNumber) {
+    public WireBook(@JsonProperty("id") Long id,
+                @JsonProperty("fullName") String fullName,
+                @JsonProperty("address") String address,
+                @JsonProperty("phone") String phone,
+                @JsonProperty("idNumber") Long idNumber) {
         this.id = id;
         this.fullName = fullName;
         this.address = address;

@@ -12,6 +12,16 @@ public class Phonebook {
     private String phone;
     private Long idNumber;
 
+    public Phonebook() {
+    }
+
+    public Phonebook(WireBook wireBook) {
+        this.fullName = wireBook.getFullName();
+        this.address = wireBook.getAddress();
+        this.phone = wireBook.getPhone();
+        this.idNumber = wireBook.getIdNumber();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false, precision = 0)
@@ -89,5 +99,12 @@ public class Phonebook {
 
     public WireBook toWire() {
         return new WireBook(this.id, this.fullName, this.address, this.phone, this.idNumber);
+    }
+
+    public void updateFromWire(WireBook wireBook) {
+        this.setFullName(wireBook.getFullName());
+        this.setAddress(wireBook.getAddress());
+        this.setPhone(wireBook.getPhone());
+        this.setIdNumber(wireBook.getIdNumber());
     }
 }
