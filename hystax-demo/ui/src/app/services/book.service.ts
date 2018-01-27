@@ -6,8 +6,11 @@ import {Book} from "../components/books/books.component";
 @Injectable()
 export class BookService {
 
-  booksPath: string = "http://172.22.6.79:9080/hystax/rest/books";
-  bookPath: string = "http://172.22.6.79:9080/hystax/rest/book/";
+  // booksPath: string = "http://172.22.6.79:9080/hystax/rest/books";
+  // bookPath: string = "http://172.22.6.79:9080/hystax/rest/book/";
+
+  booksPath: string = "rest/books";
+  bookPath: string = "rest/book/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
