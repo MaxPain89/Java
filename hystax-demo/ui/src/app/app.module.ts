@@ -18,6 +18,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
+import {MatToolbarModule} from "@angular/material";
 
 import {BookService} from "./services/book.service";
 import {BookComponent} from './components/book/book.component';
@@ -53,7 +54,8 @@ const appRoutes: Routes = [
     MatSlideToggleModule,
     FormsModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatToolbarModule
   ],
   providers: [BookService],
   bootstrap: [AppComponent]
