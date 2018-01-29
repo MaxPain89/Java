@@ -84,7 +84,7 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
-						<contextPath>/spring2</contextPath>
+						<contextPath>/hystax</contextPath>
 					</webApp>
 				</configuration>
 			</plugin>
