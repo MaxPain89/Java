@@ -21,10 +21,6 @@
       <mat-header-cell *matHeaderCellDef> Phone</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.phone}}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="idNumber">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Id number</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.idNumber}}</mat-cell>
-    </ng-container>
     <ng-container matColumnDef="buttons">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">

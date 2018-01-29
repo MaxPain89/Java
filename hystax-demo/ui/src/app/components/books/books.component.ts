@@ -23,7 +23,7 @@ export class BooksComponent implements OnInit {
 
   ngOnInit() {
     this.getBooks();
-    this.displayedColumns = ['id', 'fullName', 'address', 'phone', 'idNumber', 'buttons'];
+    this.displayedColumns = ['id', 'fullName', 'address', 'phone', 'buttons'];
   }
 
   applyFilter(filterValue: string) {

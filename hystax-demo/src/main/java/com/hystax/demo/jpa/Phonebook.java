@@ -19,7 +19,7 @@ public class Phonebook {
         this.fullName = wireBook.getFullName();
         this.address = wireBook.getAddress();
         this.phone = wireBook.getPhone();
-        this.idNumber = wireBook.getIdNumber();
+        this.idNumber = System.currentTimeMillis();
     }
 
     @Id
@@ -105,6 +105,5 @@ public class Phonebook {
         this.setFullName(wireBook.getFullName());
         this.setAddress(wireBook.getAddress());
         this.setPhone(wireBook.getPhone());
-        this.setIdNumber(wireBook.getIdNumber());
     }
 }
