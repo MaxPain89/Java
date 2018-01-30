@@ -95,3 +95,6 @@ fabric.properties
 *.iml
 /LawyersCollegium/for_delete/
 /LawyersCollegium/src/main/resources/static/*
+/hystax-demo/src/main/webapp/static/
+LawyersCollegium/base/
+LawyersCollegium/src/main/resources/static/*
