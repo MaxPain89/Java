@@ -25,9 +25,9 @@ import {BookComponent} from './components/book/book.component';
 
 const appRoutes: Routes = [
   {path: "",
-      redirectTo: "/books",
+      redirectTo: "/websphere",
       pathMatch: 'full'},
-  {path: "books", component: BooksComponent},
+  {path: "websphere", component: BooksComponent},
   {path: "book/:id", component: BookComponent}
 ];
 

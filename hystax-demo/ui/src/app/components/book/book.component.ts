@@ -37,16 +37,16 @@ export class BookComponent implements OnInit {
   saveChanges() {
     if (this.bookId == 0) {
       this.bookService.createBook(this.currentBook).subscribe(resp => {
-        this.router.navigate(['/books']);
+        this.router.navigate(['/websphere']);
       })
     } else {
       this.bookService.updateBook(this.currentBook.id, this.currentBook).subscribe(resp => {
-        this.router.navigate(['/books']);
+        this.router.navigate(['/websphere']);
       })
     }
   }
 
   cancel() {
-    this.router.navigate(['/books']);
+    this.router.navigate(['/websphere']);
   }
 }
