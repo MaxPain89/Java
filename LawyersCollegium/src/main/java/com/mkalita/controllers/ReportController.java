@@ -18,9 +18,11 @@ import java.util.List;
 
 @Component
 public class ReportController {
-    public static final float HEADER_CELL_HEIGHT = 30.62f;
-    public static final float ROWS_CELL_HEIGHT = 40.03f;
-    public static final float[] COLUMN_WIGHTS = new float[] {119.39f, 52.05f, 183.68f, 113.27f, 64.2924f};
+    private static final float HEADER_CELL_HEIGHT = 30.62f;
+    private static final float SUM_CELL_HEIGHT = 25.00f;
+    private static final float ROWS_CELL_HEIGHT = 38.03f;
+    private static final float[] COLUMN_WIGHTS = new float[] {119.39f, 52.05f, 183.68f, 113.27f, 64.2924f};
+    private static final float[] COLUMN_WIGHTS_FOR_SUMMS = new float[] {119.39f, 292.36f, 120.92f};
     BaseFont bf;
     private DecreeController decreeController;
     private CollegiumController collegiumController;
@@ -38,22 +40,62 @@ public class ReportController {
 
     public HttpEntity<byte[]> getDecreesReport(Long collegiumId, Date payDate, Boolean download) throws DocumentException, IOException {
         Collegium collegium = collegiumController._getCollegium(collegiumId);
-        List<WireDecree> decreesForYear = decreeController.getDecreesByCollegium(collegiumId, payDate);
+        List<WireDecree> decreesForDate = decreeController.getDecreesByCollegium(collegiumId, payDate);
         PdfGenerator pdf = new PdfGenerator();
+        Double sum = decreesForDate.stream().mapToDouble(WireDecree::getAmount).sum();
         byte[] documentBody = pdf
-                .addParagraph(generateUpperLabel("Управление Судебного департамента в Смоленской области", Element.ALIGN_RIGHT, 12))
-                .addParagraph(generateUpperLabel(" ", Element.ALIGN_CENTER, 12))
-                .addParagraph(generateUpperLabel("Ведомость на оплату адвокатов по определениям", Element.ALIGN_CENTER, 14))
-                .addParagraph(generateUpperLabel("(районный, городских, мировых) судов", Element.ALIGN_CENTER, 14))
-                .addTable(generateMainTable(collegium, decreesForYear))
+                .addParagraph(generateParagraph("Управление Судебного департамента в Смоленской области", Element.ALIGN_RIGHT, 12))
+                .addParagraph(generateParagraph(" ", Element.ALIGN_CENTER, 12))
+                .addParagraph(generateParagraph("Ведомость на оплату адвокатов по определениям", Element.ALIGN_CENTER, 14))
+                .addParagraph(generateParagraph("(районный, городских, мировых) судов", Element.ALIGN_CENTER, 14))
+                .addTable(generateMainTable(collegium, decreesForDate))
+                .addTable(generateStringForSum(sum))
                 .build();
         return addRequestHeaders(download, documentBody);
     }
 
-    private Paragraph generateUpperLabel(String value, int alignment, int size) {
+    private Paragraph generateParagraph(String value, int alignment, int size) {
+        return generateParagraph(value, alignment, size, 0f);
+    }
+
+    private PdfPTable generateStringForSum(double amount) throws DocumentException {
+        PdfPTable table = new PdfPTable(3);
+        table.setTotalWidth(COLUMN_WIGHTS_FOR_SUMMS);
+        table.setLockedWidth(true);
+        generateRowForSum(table, " Итого:", amount);
+        generateRowForSum(table, " Оплата труда адвокатов за счет государства:", amount);
+        return table;
+    }
+
+    private void generateRowForSum(PdfPTable table, String label, double amount) {
+        Font font = new Font(bf, 12, Font.NORMAL);
+        //empty cell
+        PdfPCell cell1 = new PdfPCell(new Phrase(" ", font));
+        cell1.setFixedHeight(SUM_CELL_HEIGHT);
+        cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell1.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell1);
+
+        PdfPCell cell2 = new PdfPCell(new Phrase(label, font));
+        cell2.setFixedHeight(SUM_CELL_HEIGHT);
+        cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell2.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell2);
+
+        PdfPCell cell3 = new PdfPCell(new Phrase(String.format("%.2f", amount), font));
+        cell3.setFixedHeight(SUM_CELL_HEIGHT);
+        cell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell3.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell3);
+    }
+
+    private Paragraph generateParagraph(String value, int alignment, int size, float indentation) {
         Font font = new Font(bf, size, Font.NORMAL);
         Paragraph paragraph = new Paragraph(value, font);
-        paragraph.setAlignment(alignment);
+        if (alignment != -1) {
+            paragraph.setAlignment(alignment);
+        }
+        paragraph.setIndentationLeft(indentation);
         return paragraph;
     }
 
@@ -62,7 +104,7 @@ public class ReportController {
         table.setTotalWidth(COLUMN_WIGHTS);
         table.setLockedWidth(true);
         table.setSpacingBefore(35);
-        table.setSpacingAfter(35);
+        table.setSpacingAfter(5);
         Font fontForCollegium = new Font(bf, 8, Font.BOLD);
         Font fontForDate = new Font(bf, 10, Font.NORMAL);
         Font fontForHeaders = new Font(bf, 10, Font.BOLD);
@@ -90,9 +132,9 @@ public class ReportController {
         return table;
     }
 
-    private void generateHeaders(Font font10Bold, PdfPTable table, float cellHeight, String... names) {
+    private void generateHeaders(Font font, PdfPTable table, float cellHeight, String... names) {
         for (String name : names) {
-            PdfPCell cell = new PdfPCell(new Phrase(name, font10Bold));
+            PdfPCell cell = new PdfPCell(new Phrase(name, font));
             cell.setFixedHeight(cellHeight);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
