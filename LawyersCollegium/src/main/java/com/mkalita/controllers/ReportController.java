@@ -1,9 +1,6 @@
 package com.mkalita.controllers;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Phrase;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -23,7 +20,8 @@ import java.util.List;
 public class ReportController {
     public static final float HEADER_CELL_HEIGHT = 30.62f;
     public static final float ROWS_CELL_HEIGHT = 40.03f;
-    public static final float[] COLLUMN_WHIDS = new float[] {119.39f, 52.05f, 183.68f, 113.27f, 64.2924f};
+    public static final float[] COLUMN_WIGHTS = new float[] {119.39f, 52.05f, 183.68f, 113.27f, 64.2924f};
+    BaseFont bf;
     private DecreeController decreeController;
     private CollegiumController collegiumController;
 
@@ -31,26 +29,46 @@ public class ReportController {
                             CollegiumController collegiumController) {
         this.decreeController = decreeController;
         this.collegiumController = collegiumController;
+        try {
+            bf = BaseFont.createFont("/home/mkalitinenkov/temp/TNR.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        } catch (DocumentException | IOException e) {
+            throw new RuntimeException("Couldn't initialize fonts system");
+        }
     }
 
     public HttpEntity<byte[]> getDecreesReport(Long collegiumId, Date payDate, Boolean download) throws DocumentException, IOException {
         Collegium collegium = collegiumController._getCollegium(collegiumId);
         List<WireDecree> decreesForYear = decreeController.getDecreesByCollegium(collegiumId, payDate);
-        BaseFont bf = BaseFont.createFont("/home/mkalitinenkov/temp/TNR.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        Font fontForCollegium = new Font(bf, 8, 1);
-        Font fontForDate = new Font(bf, 10, 0);
-        Font fontForHeaders = new Font(bf, 10, 1);
-        Font fontForOtherTableElements = new Font(bf, 11, 0);
         PdfGenerator pdf = new PdfGenerator();
+        byte[] documentBody = pdf
+                .addParagraph(generateUpperLabel("Управление Судебного департамента в Смоленской области", Element.ALIGN_RIGHT, 12))
+                .addParagraph(generateUpperLabel(" ", Element.ALIGN_CENTER, 12))
+                .addParagraph(generateUpperLabel("Ведомость на оплату адвокатов по определениям", Element.ALIGN_CENTER, 14))
+                .addParagraph(generateUpperLabel("(районный, городских, мировых) судов", Element.ALIGN_CENTER, 14))
+                .addTable(generateMainTable(collegium, decreesForYear))
+                .build();
+        return addRequestHeaders(download, documentBody);
+    }
+
+    private Paragraph generateUpperLabel(String value, int alignment, int size) {
+        Font font = new Font(bf, size, Font.NORMAL);
+        Paragraph paragraph = new Paragraph(value, font);
+        paragraph.setAlignment(alignment);
+        return paragraph;
+    }
+
+    private PdfPTable generateMainTable(Collegium collegium, List<WireDecree> decreesForYear) throws DocumentException {
         PdfPTable table = new PdfPTable(5);
-        table.setTotalWidth(COLLUMN_WHIDS);
+        table.setTotalWidth(COLUMN_WIGHTS);
         table.setLockedWidth(true);
-        table.setSpacingBefore(25);
-        table.setSpacingAfter(25);
-        //generate headers
+        table.setSpacingBefore(35);
+        table.setSpacingAfter(35);
+        Font fontForCollegium = new Font(bf, 8, Font.BOLD);
+        Font fontForDate = new Font(bf, 10, Font.NORMAL);
+        Font fontForHeaders = new Font(bf, 10, Font.BOLD);
+        Font fontForOtherTableElements = new Font(bf, 11, Font.NORMAL);
         generateHeaders(fontForHeaders, table, HEADER_CELL_HEIGHT, "Наименование юрконсультации", "Дата постанов.", "Адвокат", "Обвиняемый", "Сумма");
         Boolean firstRow = true;
-
         for (WireDecree wireDecree : decreesForYear) {
             PdfPCell collegiumCell = new PdfPCell(new Phrase(firstRow ? collegium.getName() : "", fontForCollegium));
             collegiumCell.setFixedHeight(ROWS_CELL_HEIGHT);
@@ -69,10 +87,7 @@ public class ReportController {
             dateCell.setFixedHeight(ROWS_CELL_HEIGHT);
             table.addCell(amountCell);
         }
-        byte[] documentBody = pdf
-                .addTable(table)
-                .build();
-        return addRequestHeaders(download, documentBody);
+        return table;
     }
 
     private void generateHeaders(Font font10Bold, PdfPTable table, float cellHeight, String... names) {
