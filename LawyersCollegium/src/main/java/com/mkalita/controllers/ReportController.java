@@ -23,7 +23,9 @@ public class ReportController {
     private static final float ROWS_CELL_HEIGHT = 38.03f;
     private static final float[] COLUMN_WIGHTS = new float[] {119.39f, 52.05f, 183.68f, 113.27f, 64.2924f};
     private static final float[] COLUMN_WIGHTS_FOR_SUMMS = new float[] {119.39f, 292.36f, 120.92f};
+    private static final float[] COLUMN_WIGHTS_FOR_AUTHOR_PHONE = new float[] {119.39f, 143.00f, 268.00f};
     BaseFont bf;
+    BaseFont bfBold;
     private DecreeController decreeController;
     private CollegiumController collegiumController;
 
@@ -32,7 +34,8 @@ public class ReportController {
         this.decreeController = decreeController;
         this.collegiumController = collegiumController;
         try {
-            bf = BaseFont.createFont("/home/mkalitinenkov/temp/TNR.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            bf = BaseFont.createFont("/fonts/TNR.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            bfBold = BaseFont.createFont("/fonts/TNR_b.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         } catch (DocumentException | IOException e) {
             throw new RuntimeException("Couldn't initialize fonts system");
         }
@@ -50,6 +53,7 @@ public class ReportController {
                 .addParagraph(generateParagraph("(районный, городских, мировых) судов", Element.ALIGN_CENTER, 14))
                 .addTable(generateMainTable(collegium, decreesForDate))
                 .addTable(generateStringForSum(sum))
+                .addTable(generateStringForAuthorAndPhone("Калитиненкова С.В.", "32-59-14"))
                 .build();
         return addRequestHeaders(download, documentBody);
     }
@@ -64,6 +68,15 @@ public class ReportController {
         table.setLockedWidth(true);
         generateRowForSum(table, " Итого:", amount);
         generateRowForSum(table, " Оплата труда адвокатов за счет государства:", amount);
+        return table;
+    }
+
+    private PdfPTable generateStringForAuthorAndPhone(String author, String phone) throws DocumentException {
+        PdfPTable table = new PdfPTable(3);
+        table.setTotalWidth(COLUMN_WIGHTS_FOR_AUTHOR_PHONE);
+        table.setLockedWidth(true);
+        generateRowForAuthor(table, "     Составил:", String.format("%" + 40 +"s", "\u00a0"), "    " + author);
+        generateRowForAuthor(table, "     Телефон:", "   " + phone + "   \u00a0", "");
         return table;
     }
 
@@ -89,6 +102,28 @@ public class ReportController {
         table.addCell(cell3);
     }
 
+    private void generateRowForAuthor(PdfPTable table, String first, String second, String third) {
+        Font font = new Font(bf, 12, Font.NORMAL);
+        Font underlying = new Font(bf, 12, Font.UNDERLINE);
+        //empty cell
+        PdfPCell cell1 = new PdfPCell(new Phrase(first, font));
+        cell1.setFixedHeight(SUM_CELL_HEIGHT);
+        cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell1.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell1);
+
+        PdfPCell cell2 = new PdfPCell(new Phrase(second, underlying));
+        cell2.setFixedHeight(SUM_CELL_HEIGHT);
+        cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell2.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell2);
+
+        PdfPCell cell3 = new PdfPCell(new Phrase(third, font));
+        cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell3.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell3);
+    }
+
     private Paragraph generateParagraph(String value, int alignment, int size, float indentation) {
         Font font = new Font(bf, size, Font.NORMAL);
         Paragraph paragraph = new Paragraph(value, font);
@@ -105,9 +140,9 @@ public class ReportController {
         table.setLockedWidth(true);
         table.setSpacingBefore(35);
         table.setSpacingAfter(5);
-        Font fontForCollegium = new Font(bf, 8, Font.BOLD);
+        Font fontForCollegium = new Font(bfBold, 8, Font.NORMAL);
         Font fontForDate = new Font(bf, 10, Font.NORMAL);
-        Font fontForHeaders = new Font(bf, 10, Font.BOLD);
+        Font fontForHeaders = new Font(bfBold, 10, Font.NORMAL);
         Font fontForOtherTableElements = new Font(bf, 11, Font.NORMAL);
         generateHeaders(fontForHeaders, table, HEADER_CELL_HEIGHT, "Наименование юрконсультации", "Дата постанов.", "Адвокат", "Обвиняемый", "Сумма");
         Boolean firstRow = true;
