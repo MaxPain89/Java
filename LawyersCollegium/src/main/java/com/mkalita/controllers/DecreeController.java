@@ -1,5 +1,6 @@
 package com.mkalita.controllers;
 
+import com.mkalita.jpa.Collegium;
 import com.mkalita.jpa.Decree;
 import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.JPAUtil;
@@ -29,8 +30,8 @@ public class DecreeController {
         if (actualDate == null) {
             return false;
         }
-        boolean beforeCondition = startDate == null || actualDate.after(startDate);
-        boolean afterCondition = endDate == null || actualDate.before(endDate);
+        boolean beforeCondition = startDate == null || actualDate.after(startDate) || actualDate.equals(startDate);
+        boolean afterCondition = endDate == null || actualDate.before(endDate)  || actualDate.equals(endDate);
         return beforeCondition && afterCondition;
     }
 
@@ -43,16 +44,20 @@ public class DecreeController {
         return _getAllDecrees().stream().map(Decree::toWire).collect(Collectors.toList());
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public List<WireDecree> getDecreesByDate(Date startDate, Date endDate) {
+    public List<Decree> _getDecreesByDate(Date startDate, Date endDate, Boolean checkPayDate) {
         return _getAllDecrees().stream()
-                .filter((item) -> checkDateRange(item.getDate(), startDate, endDate))
-                .sorted(Comparator.comparing(Decree::getDate))
+                .filter((item) -> checkDateRange(checkPayDate ? item.getPayDate() : item.getDate(), startDate, endDate))
+                .collect(Collectors.toList());
+    }
+    @SuppressWarnings("WeakerAccess")
+    public List<WireDecree> getDecreesByDate(Date startDate, Date endDate,  Boolean checkPayDate) {
+        return _getDecreesByDate(startDate, endDate, checkPayDate)
+                .stream()
                 .map(Decree::toWire)
                 .collect(Collectors.toList());
     }
 
-    public List<WireDecree> getDecreesForYear(Integer year) {
+    public List<WireDecree> getDecreesForYear(Integer year, Boolean checkPayDate) {
         if (year != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -61,10 +66,34 @@ public class DecreeController {
             Date startDate = calendar.getTime();
             calendar.set(Calendar.YEAR, year + 1);
             Date endDate = calendar.getTime();
-            return getDecreesByDate(startDate, endDate);
+            return getDecreesByDate(startDate, endDate, checkPayDate);
         } else {
-            return getDecreesByDate(null, null);
+            return getDecreesByDate(null, null, checkPayDate);
         }
+    }
+
+    public List<WireDecree> getDecreesByCollegium(Long collegiumId, Date payDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(payDate);
+        calendar.add(Calendar.DATE, 1);
+        Date endDate = calendar.getTime();
+        return _getDecreesByDate(payDate, endDate, true)
+                .stream()
+                .filter(decree -> collegiumId.equals(getCollegiumIdFromDecree(decree)))
+                .sorted(Comparator.comparing(n -> n.getLawyer().getId()))
+                .map(Decree::toWire)
+                .collect(Collectors.toList());
+    }
+
+    private Long getCollegiumIdFromDecree(Decree decree) {
+        Lawyer lawyer = decree.getLawyer();
+        if (lawyer != null) {
+            Collegium collegium = lawyer.getCollegium();
+            if (collegium != null) {
+                return collegium.getId();
+            }
+        }
+        return null;
     }
 
     @SuppressWarnings("unused")

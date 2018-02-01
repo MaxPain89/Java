@@ -38,6 +38,7 @@
     <dep.pmd.version>5.2.1</dep.pmd.version>
     <dep.jetty-server.version>9.4.8.v20171121</dep.jetty-server.version>
     <dep.spring.version>4.3.13.RELEASE</dep.spring.version>
+    <dep.itext.version>5.5.6</dep.itext.version>
   </properties>
 
   <dependencies>
@@ -121,6 +122,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!--pdf generation-->
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>${dep.itext.version}</version>
+    </dependency>
     <!--tests-->
     <dependency>
       <groupId>junit</groupId>

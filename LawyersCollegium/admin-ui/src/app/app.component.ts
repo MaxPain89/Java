@@ -14,7 +14,8 @@ export class AppComponent {
     this.routeLinks = [
       {label: 'Постановления', path: 'decrees'},
       {label: 'Адвокаты', path: 'lawyers'},
-      {label: 'Коллегии', path: 'collegiums'}
+      {label: 'Коллегии', path: 'collegiums'},
+      {label: 'Отчеты', path: 'reports'}
       ];
   }
 }

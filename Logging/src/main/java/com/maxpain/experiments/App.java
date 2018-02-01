@@ -23,5 +23,9 @@ public class App
         for(URL url: urls){
             log.info(url.getFile());
         }
+
+        int numberOfSpaces = 80;
+        float sum = 74567.00f;
+        System.out.println(String.format("Итого:%" + 80 + ".2f", sum));
     }
 }

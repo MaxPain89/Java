@@ -17,7 +17,6 @@ export class LawyerService {
   constructor(private http: HttpClient) {
   }
 
-  // noinspection JSUnusedGlobalSymbols
   getLawyer(id: number): Observable<any> {
     return this.http.get(this.lawyerPath + id);
   }
