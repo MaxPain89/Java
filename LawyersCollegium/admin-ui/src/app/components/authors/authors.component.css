@@ -1,0 +1,9 @@
+.inline-flex {
+  display:inline-flex;
+  width: 100%;
+
+}
+
+.add-button {
+  margin: 5px 10px;
+}

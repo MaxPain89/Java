@@ -15,7 +15,8 @@ export class AppComponent {
       {label: 'Постановления', path: 'decrees'},
       {label: 'Адвокаты', path: 'lawyers'},
       {label: 'Коллегии', path: 'collegiums'},
-      {label: 'Отчеты', path: 'reports'}
+      {label: 'Отчеты', path: 'reports'},
+      {label: 'Составители', path: 'authors'}
       ];
   }
 }
