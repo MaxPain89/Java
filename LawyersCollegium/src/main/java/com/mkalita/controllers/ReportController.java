@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.mkalita.jpa.Collegium;
 import com.mkalita.utils.PdfGenerator;
+import com.mkalita.wire.WireAuthor;
 import com.mkalita.wire.WireDecree;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,11 +29,14 @@ public class ReportController {
     BaseFont bfBold;
     private DecreeController decreeController;
     private CollegiumController collegiumController;
+    private AuthorController authorController;
 
     public ReportController(DecreeController decreeController,
-                            CollegiumController collegiumController) {
+                            CollegiumController collegiumController,
+                            AuthorController authorController) {
         this.decreeController = decreeController;
         this.collegiumController = collegiumController;
+        this.authorController = authorController;
         try {
             bf = BaseFont.createFont("/fonts/TNR.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             bfBold = BaseFont.createFont("/fonts/TNR_b.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -41,7 +45,8 @@ public class ReportController {
         }
     }
 
-    public HttpEntity<byte[]> getDecreesReport(Long collegiumId, Date payDate, Boolean download) throws DocumentException, IOException {
+    public HttpEntity<byte[]> getDecreesReport(Long collegiumId, Date payDate, Boolean download, int reporterId) throws DocumentException, IOException {
+        WireAuthor author = authorController.getAuthor(reporterId);
         Collegium collegium = collegiumController._getCollegium(collegiumId);
         List<WireDecree> decreesForDate = decreeController.getDecreesByCollegium(collegiumId, payDate);
         PdfGenerator pdf = new PdfGenerator();
@@ -53,7 +58,7 @@ public class ReportController {
                 .addParagraph(generateParagraph("(районный, городских, мировых) судов", Element.ALIGN_CENTER, 14))
                 .addTable(generateMainTable(collegium, decreesForDate))
                 .addTable(generateStringForSum(sum))
-                .addTable(generateStringForAuthorAndPhone("Калитиненкова С.В.", "32-59-14"))
+                .addTable(generateStringForAuthorAndPhone(author.getName(), author.getPhone()))
                 .build();
         return addRequestHeaders(download, documentBody);
     }

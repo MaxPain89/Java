@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
 import {LawyerService} from "../../services/lawyer.service";
-import {Collegium} from "../collegium/collegium.component";
+import {Collegium} from "../collegiums/collegiums.component";
 import {CollegiumService} from "../../services/collegium.service";
 import {Router} from "@angular/router";
 

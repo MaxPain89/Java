@@ -34,6 +34,9 @@ import {CollegiumsComponent} from './components/collegiums/collegiums.component'
 import {CollegiumService} from "./services/collegium.service";
 import {ReportsComponent} from './components/reports/reports.component';
 import {ReportService} from "./services/report.service";
+import { AuthorsComponent } from './components/authors/authors.component';
+import { AuthorComponent } from './components/author/author.component';
+import {AuthorService} from "./services/author.service";
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
@@ -42,7 +45,9 @@ const appRoutes: Routes = [
   {path: "lawyer/:id", component: LawyerComponent},
   {path: "collegiums", component: CollegiumsComponent},
   {path: "collegium/:id", component: CollegiumComponent},
-  {path: "reports", component: ReportsComponent}
+  {path: "reports", component: ReportsComponent},
+  {path: "authors", component: AuthorsComponent},
+  {path: "author/:id", component: AuthorComponent},
 ];
 
 @NgModule({
@@ -54,7 +59,9 @@ const appRoutes: Routes = [
     DecreeComponent,
     LawyerComponent,
     CollegiumsComponent,
-    ReportsComponent
+    ReportsComponent,
+    AuthorsComponent,
+    AuthorComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +87,7 @@ const appRoutes: Routes = [
     LawyerService,
     CollegiumService,
     ReportService,
+    AuthorService,
     {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}],

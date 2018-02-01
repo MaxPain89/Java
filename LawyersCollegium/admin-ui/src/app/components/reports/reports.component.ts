@@ -3,6 +3,7 @@ import {ReportService} from "../../services/report.service";
 import {CollegiumService} from "../../services/collegium.service";
 import {Moment} from "moment";
 import {MatDatepickerInputEvent} from "@angular/material";
+import {AuthorService} from "../../services/author.service";
 
 @Component({
   selector: 'app-reports',
@@ -11,14 +12,18 @@ import {MatDatepickerInputEvent} from "@angular/material";
 })
 export class ReportsComponent implements OnInit {
 
-  collegiumsMaps = {};
+  collegiumsMap = {};
+  authorsMap = {};
   currentCollegiumId = 0;
+  currentAuthorId = 1;
   currentReportDecreeDate: Moment;
   constructor(private reportService: ReportService,
-              private collegiumService: CollegiumService) { }
+              private collegiumService: CollegiumService,
+              private authorService: AuthorService) { }
 
   ngOnInit() {
     this.getCollegiumMap();
+    this.currentAuthorId = 1;
   }
 
   getCollegiumMap() {
@@ -27,15 +32,34 @@ export class ReportsComponent implements OnInit {
       collegiumsResp.forEach(function (collegium) {
         collegiumsMap[collegium.id] = collegium;
       });
-      this.collegiumsMaps = collegiumsMap;
+      this.collegiumsMap = collegiumsMap;
+      this.getauthorsMap();
     })
   }
 
   getCollegiumsMapKeys() : Array<number> {
-    return Object.keys(this.collegiumsMaps).map(Number);
+    return Object.keys(this.collegiumsMap).map(Number);
+  }
+
+  getauthorsMap() {
+    this.authorService.getAuthors().subscribe(authorsResp => {
+      let authorsMap = {};
+      authorsResp.forEach(function (author) {
+        authorsMap[author.id] = author;
+      });
+      this.authorsMap = authorsMap;
+    })
+  }
+
+  getAuthorsMapKeys() : Array<number> {
+    return Object.keys(this.authorsMap).map(Number);
   }
 
   onChangeCollegium(value) {
+
+  }
+
+  onChangeAuthor(value) {
 
   }
 
@@ -44,12 +68,18 @@ export class ReportsComponent implements OnInit {
   }
 
   open() {
-    this.reportService.getDecreeReport(this.currentCollegiumId, false, this.currentReportDecreeDate.format("DD/MM/YYYY"));
+    this.reportService.getDecreeReport(this.currentCollegiumId,
+                                       false,
+                                       this.currentReportDecreeDate.format("DD/MM/YYYY"),
+                                       this.currentAuthorId);
   }
 
 
   save() {
-    this.reportService.getDecreeReport(this.currentCollegiumId, true, this.currentReportDecreeDate.format("DD/MM/YYYY"));
+    this.reportService.getDecreeReport(this.currentCollegiumId,
+                                       true,
+                                       this.currentReportDecreeDate.format("DD/MM/YYYY"),
+                                       this.currentAuthorId);
   }
 
 }

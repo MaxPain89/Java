@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {Collegium} from "../components/collegium/collegium.component";
+import {Collegium} from "../components/collegiums/collegiums.component";
 
 @Injectable()
 export class CollegiumService {

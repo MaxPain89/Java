@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Lawyer} from "../lawyers/lawyers.component";
 import {CollegiumService} from "../../services/collegium.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {LawyerService} from "../../services/lawyer.service";
+import {Collegium} from "../collegiums/collegiums.component";
 
 @Component({
   selector: 'app-collegium',
@@ -51,10 +50,4 @@ export class CollegiumComponent implements OnInit {
   cancel() {
     this.router.navigate(['/collegiums']);
   }
-}
-
-export interface Collegium {
-  id: number,
-  name: String,
-  other: String
 }

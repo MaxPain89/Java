@@ -21,10 +21,11 @@ public class ReportResource {
 
     @RequestMapping(value = "/reports/decrees/collegium/{collegiumId}", method = RequestMethod.GET)
     public HttpEntity<byte[]> getDecreesByYear(@RequestParam(required = false, defaultValue = "false") Boolean download,
+                                               @RequestParam(required = false, defaultValue = "1") int reporterId,
                                                @PathVariable Long collegiumId,
                                                @RequestParam String payDate) {
         try {
-            return reportController.getDecreesReport(collegiumId, DateParser.dateFromStr(payDate), download);
+            return reportController.getDecreesReport(collegiumId, DateParser.dateFromStr(payDate), download, reporterId);
         } catch (DocumentException|IOException e) {
             throw new InternalServerError(e.getMessage());
         }
