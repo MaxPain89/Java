@@ -9,8 +9,9 @@ export class ReportService {
 
   }
 
-  getDecreeReport(collegiumId: number, downloadMode: boolean, payDate: string) {
-    let params: string = collegiumId + "?payDate=" + payDate;
+  getDecreeReport(collegiumId: number, downloadMode: boolean, payDate: string, reporterId: number) {
+    let params: string = collegiumId + "?payDate=" + payDate + "&reporterId=" + reporterId;
+
     if (downloadMode) {
       params += "&download=true";
     }
