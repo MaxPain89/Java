@@ -29,6 +29,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
 import { LawyerComponent } from './components/lawyer/lawyer.component';
 import { CollegiumsComponent } from './components/collegiums/collegiums.component';
 import {CollegiumService} from "./services/collegium.service";
+import { ReportsComponent } from './components/reports/reports.component';
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
   {path: "lawyers", component: LawyersComponent},
   {path: "lawyer/:id", component: LawyerComponent},
   {path: "collegiums", component: CollegiumsComponent},
-  {path: "collegium/:id", component: CollegiumComponent}
+  {path: "collegium/:id", component: CollegiumComponent},
+  {path: "reports", component: ReportsComponent}
 ];
 
 @NgModule({
@@ -47,7 +49,8 @@ const appRoutes: Routes = [
     CollegiumComponent,
     DecreeComponent,
     LawyerComponent,
-    CollegiumsComponent
+    CollegiumsComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
