@@ -12,7 +12,7 @@ import java.util.*;
 
 public class JPAUtil {
 
-    public static <T> Optional<T> getObject(
+    public static synchronized <T> Optional<T> getObject(
             final EntityManager em,
             final String idField,
             final Object idValue,
@@ -49,7 +49,7 @@ public class JPAUtil {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static <T> List<T> getObjects(
+    public static synchronized <T> List<T> getObjects(
             final EntityManager em,
             final Map<String, Object> conditions,
             final JPASortParams sortParams,
