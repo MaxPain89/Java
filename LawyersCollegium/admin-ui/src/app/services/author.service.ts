@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Author} from "../components/authors/authors.component";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class AuthorService {
 
-  authorsPath: string = "http://localhost:8085/authors";
-  authorPath: string = "http://localhost:8085/author/";
+  authorsPath: string = environment.restApiUrl + "/authors";
+  authorPath: string = environment.restApiUrl + "/author/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',

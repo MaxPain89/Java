@@ -3,12 +3,13 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import * as moment from "moment";
 import {Decree} from "../components/decrees/decrees.component";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class DecreeService {
 
-  decreesPath: string = "http://localhost:8085/decrees";
-  decreePath: string = "http://localhost:8085/decree/";
+  decreesPath: string = environment.restApiUrl + "/decrees";
+  decreePath: string = environment.restApiUrl + "/decree/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',

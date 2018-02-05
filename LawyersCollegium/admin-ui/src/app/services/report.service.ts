@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ReportService {
 
-  decreeReportPath: string = "http://localhost:8085/reports/decrees/collegium/";
+  decreeReportPath: string = environment.restApiUrl + "/reports/decrees/collegium/";
 
   constructor() {
 
