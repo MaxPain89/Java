@@ -5,7 +5,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LawyerService} from "../../services/lawyer.service";
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {MatDatepickerInputEvent} from "@angular/material";
+import {ErrorStateMatcher, MatDatepickerInputEvent} from "@angular/material";
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-decree',
@@ -15,11 +16,13 @@ import {MatDatepickerInputEvent} from "@angular/material";
 export class DecreeComponent implements OnInit {
   decreeId: number = 43192;
   currentDecree: Decree = <Decree>{};
-  currentLawyerId: number = 0;
+  currentLawyerId = new FormControl(0, [
+    Validators.min(1)
+  ]);
   lawyersMap = {};
   currentDecreeDate: Moment;
   currentDecreePayDate: Moment;
-
+  matcher = new MyErrorStateMatcher();
   constructor(private decreeService: DecreeService,
               private lawyerService: LawyerService,
               private route: ActivatedRoute,
@@ -42,7 +45,7 @@ export class DecreeComponent implements OnInit {
   getDecree() {
     this.decreeService.getDecree(this.decreeId).subscribe(decreesResp => {
       this.currentDecree = decreesResp;
-      this.currentLawyerId = this.currentDecree.lawyerId;
+      this.currentLawyerId.setValue(this.currentDecree.lawyerId);
       this.currentDecreeDate = moment(this.currentDecree.date, 'DD/MM/YYYY');
       this.currentDecreePayDate = moment(this.currentDecree.payDate, 'DD/MM/YYYY');
       this.getLawyersMap();
@@ -65,11 +68,11 @@ export class DecreeComponent implements OnInit {
 
   saveChanges() {
     if (this.decreeId == 0) {
-      this.decreeService.createDecree(this.currentDecree, this.currentLawyerId == 0 ? null : this.currentLawyerId).subscribe(resp => {
+      this.decreeService.createDecree(this.currentDecree, this.currentLawyerId.value == 0 ? null : this.currentLawyerId.value).subscribe(resp => {
         this.router.navigate(['/decrees']);
       })
     } else {
-      this.decreeService.updateDecree(this.currentDecree.id, this.currentDecree, this.currentLawyerId).subscribe(resp => {
+      this.decreeService.updateDecree(this.currentDecree.id, this.currentDecree, this.currentLawyerId.value).subscribe(resp => {
         this.router.navigate(['/decrees']);
       })
     }
@@ -80,7 +83,7 @@ export class DecreeComponent implements OnInit {
   }
 
   onChangeLawyer(newValue) {
-    this.currentLawyerId = newValue.value;
+    this.currentLawyerId.setValue(newValue.value);
   }
 
   onChangeDecreeDate(event: MatDatepickerInputEvent<Moment>) {
@@ -89,5 +92,11 @@ export class DecreeComponent implements OnInit {
 
   onChangeDecreePayDate(event: MatDatepickerInputEvent<Moment>) {
     this.currentDecree.payDate = event.value.format("DD/MM/YYYY");
+  }
+}
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl): boolean {
+    return !!(control && control.invalid);
   }
 }

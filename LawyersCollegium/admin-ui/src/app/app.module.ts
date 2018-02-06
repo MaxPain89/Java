@@ -37,6 +37,7 @@ import {ReportService} from "./services/report.service";
 import { AuthorsComponent } from './components/authors/authors.component';
 import { AuthorComponent } from './components/author/author.component';
 import {AuthorService} from "./services/author.service";
+import {ReactiveFormsModule} from "@angular/forms";
 
 const appRoutes: Routes = [
   {path: "decrees", component: DecreesComponent},
@@ -81,7 +82,8 @@ const appRoutes: Routes = [
     FormsModule,
     MatIconModule,
     MatCardModule,
-    MatToolbarModule
+    MatToolbarModule,
+    ReactiveFormsModule
   ],
   providers: [DecreeService,
     LawyerService,
