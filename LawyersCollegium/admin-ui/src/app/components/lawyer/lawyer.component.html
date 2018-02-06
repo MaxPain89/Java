@@ -7,12 +7,13 @@
     </div>
     <div>
       <mat-form-field class="lawyer-card-field">
-        <mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">
+        <mat-select placeholder="Выберете коллегию" [formControl]="currentCollegiumId" (change)="onChangeCollegium($event)" [errorStateMatcher]="matcher">
           <mat-option value=0>--</mat-option>
           <mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">
             {{collegiumsMaps[key].name}}
           </mat-option>
         </mat-select>
+        <mat-error>Необходимо выбрать коллегию</mat-error>
       </mat-form-field>
     </div>
     <div>
@@ -29,7 +30,7 @@
     </div>
   </div>
   <mat-card-actions class="lawyer-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="saveChanges()">
+    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="currentCollegiumId.hasError('min')">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button color="primary" (click)="cancel()">

@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LawyerService} from "../../services/lawyer.service";
 import {Lawyer} from "../lawyers/lawyers.component";
 import {CollegiumService} from "../../services/collegium.service";
+import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {ErrorStateMatcher} from "@angular/material";
 
 @Component({
   selector: 'app-lawyer',
@@ -13,8 +15,11 @@ export class LawyerComponent implements OnInit {
 
   collegiumsMaps = {};
   currentLawyer: Lawyer = <Lawyer>{};
-  currentCollegiumId:number=0;
+  currentCollegiumId = new FormControl(0, [
+    Validators.min(1)
+  ]);
   lawyerId:number=43192;
+  matcher = new MyErrorStateMatcher();
   constructor(private collegiumService: CollegiumService,
               private lawyerService: LawyerService,
               private route: ActivatedRoute,
@@ -22,13 +27,14 @@ export class LawyerComponent implements OnInit {
     this.route.params.subscribe( params => {
       this.lawyerId = params['id']
       if (this.lawyerId == 0) {
-        this.currentCollegiumId = 0;
+        this.currentCollegiumId.setValue(0);
         this.currentLawyer.out = false;
         this.getCollegiumMap();
       } else {
         this.getLawyer();
       }
     });
+
 
   }
 
@@ -39,7 +45,7 @@ export class LawyerComponent implements OnInit {
     this.lawyerService.getLawyer(this.lawyerId).subscribe(lawyerResp => {
       this.currentLawyer = lawyerResp;
       this.lawyerId = lawyerResp.id;
-      this.currentCollegiumId = lawyerResp.collegiumId;
+      this.currentCollegiumId.setValue(lawyerResp.collegiumId);
       this.getCollegiumMap();
     })
   }
@@ -60,11 +66,11 @@ export class LawyerComponent implements OnInit {
 
   saveChanges() {
     if (this.lawyerId == 0) {
-      this.lawyerService.createLawyer(this.currentLawyer, this.currentCollegiumId == 0 ? null : this.currentCollegiumId).subscribe(resp => {
+      this.lawyerService.createLawyer(this.currentLawyer, this.currentCollegiumId.value == 0 ? null : this.currentCollegiumId.value).subscribe(resp => {
         this.router.navigate(['/lawyers']);
       })
     } else {
-      this.lawyerService.updateLawyer(this.currentLawyer.id, this.currentLawyer, this.currentCollegiumId).subscribe(resp => {
+      this.lawyerService.updateLawyer(this.currentLawyer.id, this.currentLawyer, this.currentCollegiumId.value).subscribe(resp => {
         this.router.navigate(['/lawyers']);
       })
     }
@@ -82,4 +88,10 @@ export class LawyerComponent implements OnInit {
     this.currentLawyer.out = value.checked;
   }
 
+}
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl): boolean {
+    return !!(control && control.invalid);
+  }
 }
