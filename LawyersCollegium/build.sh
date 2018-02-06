@@ -10,6 +10,6 @@ source ~/.nvm/nvm.sh
 nvm use 7.5.0
 
 cd ${BASEDIR}/admin-ui;
-ng build --delete-output-path --output-path ${BASEDIR}/src/main/resources/static;
+ng build --delete-output-path --prod --output-path ${BASEDIR}/src/main/resources/static;
 cd ${BASEDIR};
 mvn clean verify;

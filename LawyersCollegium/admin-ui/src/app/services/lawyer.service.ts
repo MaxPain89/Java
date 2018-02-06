@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Lawyer} from "../components/lawyers/lawyers.component";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class LawyerService {
 
-  lawyersPath: string = "http://localhost:8085/lawyers";
-  lawyerPath: string = "http://localhost:8085/lawyer/";
+  lawyersPath: string = environment.restApiUrl + "/lawyers";
+  lawyerPath: string = environment.restApiUrl + "/lawyer/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',

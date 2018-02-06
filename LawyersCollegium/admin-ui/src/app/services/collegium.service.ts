@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Collegium} from "../components/collegiums/collegiums.component";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class CollegiumService {
 
-  collegiumsPath: string = "http://localhost:8085/collegiums";
-  collegiumPath: string = "http://localhost:8085/collegium/";
+  collegiumsPath: string = environment.restApiUrl + "/collegiums";
+  collegiumPath: string = environment.restApiUrl + "/collegium/";
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
