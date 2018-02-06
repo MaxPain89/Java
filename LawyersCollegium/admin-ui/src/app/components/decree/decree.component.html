@@ -15,12 +15,13 @@
     </div>
     <div>
       <mat-form-field class="decree-card-field">
-        <mat-select placeholder="Выберете адвоката" [(value)]="currentLawyerId" (change)="onChangeLawyer($event)">
+        <mat-select placeholder="Выберете адвоката" [formControl]="currentLawyerId" (change)="onChangeLawyer($event)" [errorStateMatcher]="matcher">
           <mat-option value=0>--</mat-option>
           <mat-option *ngFor="let key of getLawyersMapKeys()" [value]="key">
             {{lawyersMap[key].fullName}}
           </mat-option>
         </mat-select>
+        <mat-error>Необходимо выбрать адвоката</mat-error>
       </mat-form-field>
     </div>
     <div>
@@ -38,7 +39,7 @@
     </div>
   </div>
   <mat-card-actions class="decree-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="saveChanges()">
+    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="currentLawyerId.hasError('min')">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button color="primary" (click)="cancel()">
