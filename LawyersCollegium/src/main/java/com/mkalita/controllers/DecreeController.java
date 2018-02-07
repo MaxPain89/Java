@@ -3,6 +3,7 @@ package com.mkalita.controllers;
 import com.mkalita.jpa.Collegium;
 import com.mkalita.jpa.Decree;
 import com.mkalita.jpa.Lawyer;
+import com.mkalita.utils.DateRange;
 import com.mkalita.utils.JPAUtil;
 import com.mkalita.webserver.exceptions.NotFoundException;
 import com.mkalita.wire.WireDecree;
@@ -26,15 +27,6 @@ public class DecreeController {
         this.lawyerController = lawyerController;
     }
 
-    private static boolean checkDateRange(Date actualDate, Date startDate, Date endDate) {
-        if (actualDate == null) {
-            return false;
-        }
-        boolean beforeCondition = startDate == null || actualDate.after(startDate) || actualDate.equals(startDate);
-        boolean afterCondition = endDate == null || actualDate.before(endDate)  || actualDate.equals(endDate);
-        return beforeCondition && afterCondition;
-    }
-
     private List<Decree> _getAllDecrees() {
         return JPAUtil.getObjects(em, null, Decree.class);
     }
@@ -45,12 +37,21 @@ public class DecreeController {
     }
 
     public List<Decree> _getDecreesByDate(Date startDate, Date endDate, Boolean checkPayDate) {
-        return _getAllDecrees().stream()
-                .filter((item) -> checkDateRange(checkPayDate ? item.getPayDate() : item.getDate(), startDate, endDate))
-                .collect(Collectors.toList());
+        return _getDecreesByDate(startDate, endDate, checkPayDate, null);
     }
+
+    public List<Decree> _getDecreesByDate(Date startDate, Date endDate, Boolean checkPayDate, Map<String, Object> conditions) {
+        String fieldName = checkPayDate ? "payDate" : "date";
+        Map<String, Object> resultConditions = new HashMap<>();
+        if (conditions != null) {
+            resultConditions.putAll(conditions);
+        }
+        resultConditions.put(fieldName, new DateRange(startDate, true, endDate, true));
+        return JPAUtil.getObjects(em, resultConditions, null, Decree.class);
+    }
+
     @SuppressWarnings("WeakerAccess")
-    public List<WireDecree> getDecreesByDate(Date startDate, Date endDate,  Boolean checkPayDate) {
+    public List<WireDecree> getDecreesByDate(Date startDate, Date endDate, Boolean checkPayDate) {
         return _getDecreesByDate(startDate, endDate, checkPayDate)
                 .stream()
                 .map(Decree::toWire)
@@ -77,23 +78,12 @@ public class DecreeController {
         calendar.setTime(payDate);
         calendar.add(Calendar.DATE, 1);
         Date endDate = calendar.getTime();
-        return _getDecreesByDate(payDate, endDate, true)
+        Map<String, Object> conditions = Collections.singletonMap("lawyer.collegium.id", collegiumId);
+        return _getDecreesByDate(payDate, endDate, true, conditions)
                 .stream()
-                .filter(decree -> collegiumId.equals(getCollegiumIdFromDecree(decree)))
                 .sorted(Comparator.comparing(n -> n.getLawyer().getId()))
                 .map(Decree::toWire)
                 .collect(Collectors.toList());
-    }
-
-    private Long getCollegiumIdFromDecree(Decree decree) {
-        Lawyer lawyer = decree.getLawyer();
-        if (lawyer != null) {
-            Collegium collegium = lawyer.getCollegium();
-            if (collegium != null) {
-                return collegium.getId();
-            }
-        }
-        return null;
     }
 
     @SuppressWarnings("unused")

@@ -13,12 +13,15 @@
 
     </appender>
     <!--<root level="ALL">-->
-    <!--<appender-ref ref="console" />-->
+        <!--<appender-ref ref="console" />-->
     <!--</root>-->
     <logger name="org.eclipse.jetty.server" level="ALL">
         <appender-ref ref="console"/>
     </logger>
     <logger name="com.mkalita" level="ALL">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="org.hibernate.jdbc.util.SQLStatementLogger" level="ALL">
         <appender-ref ref="console"/>
     </logger>
 </configuration>
