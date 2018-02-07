@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JPAUtil {
@@ -68,12 +69,14 @@ public class JPAUtil {
                 String idField = condition.getKey();
                 Object idValue = condition.getValue();
                 Path<Object> objectPath = null;
+                String lastName = "";
                 for (String s : idField.split("\\.")) {
                     if (objectPath == null) {
                         objectPath = table.get(s);
                     } else {
                         objectPath = objectPath.get(s);
                     }
+                    lastName = s;
                 }
                 if (idValue instanceof Collection) {
                     if (((Collection) idValue).isEmpty()) {
@@ -82,7 +85,25 @@ public class JPAUtil {
                     if (objectPath != null) {
                         predicates.add(objectPath.in((Collection) idValue));
                     }
-                } else {
+                } else if (idValue instanceof DateRange) {
+                    DateRange dr = (DateRange) idValue;
+                    if (dr.getStartDate() != null) {
+                        Path<Date> pd = objectPath.getParentPath().get(lastName);
+                        if (dr.isStartIncluded()) {
+                            predicates.add(cb.greaterThanOrEqualTo(pd, dr.getStartDate()));
+                        } else {
+                            predicates.add(cb.greaterThan(pd, dr.getStartDate()));
+                        }
+                    }
+                    if (dr.getEndDate() != null) {
+                        Path<Date> pd = objectPath.getParentPath().get(lastName);
+                        if (dr.isEndIncluded()) {
+                            predicates.add(cb.lessThanOrEqualTo(pd, dr.getEndDate()));
+                        } else {
+                            predicates.add(cb.lessThan(pd, dr.getEndDate()));
+                        }
+                    }
+                }  else {
                     predicates.add(cb.equal(objectPath, idValue));
                 }
             }
@@ -107,7 +128,7 @@ public class JPAUtil {
 
             return objectQuery.getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Unknown error", e);
+            throw new RuntimeException(String.format("Unknown error + %s", e.toString()));
         }
     }
 
