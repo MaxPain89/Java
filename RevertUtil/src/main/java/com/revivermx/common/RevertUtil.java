@@ -1,6 +1,7 @@
 package com.revivermx.common;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
@@ -10,6 +11,7 @@ import java.awt.image.IndexColorModel;
 import java.io.*;
 
 public class RevertUtil {
+    private static final Logger log = Logger.getLogger(RevertUtil.class);
     private static final int HALF_ROW_WIDTH_BYTES = 2400/4;
     private static final int DLP_IMAGE_ROTATION_ANGLE = 180;
 
@@ -31,11 +33,13 @@ public class RevertUtil {
         int count = length/HALF_ROW_WIDTH_BYTES;
         byte[] temp = new byte[HALF_ROW_WIDTH_BYTES];
         for (int i = 0; i < count; i++) {
+            int read;
             if (i % 2 == 0) {
-                firstPartIs.read(temp);
+                read = firstPartIs.read(temp);
             } else {
-                secondPartIs.read(temp);
+                read = secondPartIs.read(temp);
             }
+            log.info(String.format("Read %d bytes", read));
             outStream.write(temp);
         }
     }
