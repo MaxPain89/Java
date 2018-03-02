@@ -14,6 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.targetJdk>1.8</project.build.targetJdk>
         <build.jvmsize>1024m</build.jvmsize>
+        <plugin.mvn.dependancy>2.10</plugin.mvn.dependancy>
+        <plugin.mvn.assmbl>2.4</plugin.mvn.assmbl>
+        <plugin.findbugs.version>3.0.2</plugin.findbugs.version>
+        <plugin.pmd.version>3.3</plugin.pmd.version>
+        <dep.findbugs.version>3.0.1</dep.findbugs.version>
+        <dep.pmd.version>5.2.1</dep.pmd.version>
     </properties>
 
     <dependencies>
@@ -55,6 +61,88 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>${plugin.mvn.dependancy}</version>
+                <configuration>
+                    <skip>false</skip>
+                    <failOnWarning>true</failOnWarning>
+                    <ignoreNonCompile>true</ignoreNonCompile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>analyze-only</goal>
+                            <goal>analyze-duplicate</goal>
+                            <goal>analyze-dep-mgt</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${plugin.findbugs.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>findbugs</artifactId>
+                        <version>${dep.findbugs.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration combine.children="append">
+                    <skip>false</skip>
+                    <jvmArgs>-Xmx${build.jvmsize}</jvmArgs>
+                    <failOnError>true</failOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${plugin.pmd.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd-java</artifactId>
+                        <version>${dep.pmd.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <skip>false</skip>
+                    <failOnViolation>true</failOnViolation>
+                    <failurePriority>1</failurePriority>
+                    <targetJdk>${project.build.targetJdk}</targetJdk>
+                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <excludes>
+                        <exclude>**/*Bean.java</exclude>
+                        <exclude>**/generated/*.java</exclude>
+                    </excludes>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/stubs</excludeRoot>
+                    </excludeRoots>
+                    <rulesets>
+                        <ruleset>/rulesets/java/braces.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
