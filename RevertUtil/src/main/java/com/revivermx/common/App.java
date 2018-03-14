@@ -18,13 +18,13 @@ public class App {
         } else if (args.length == 2) {
             outPath = args[1];
         } else {
-            throw new RuntimeException(String.format("The util receive one (source file) or two (source and destination file) arguments. received %d arguments", args.length));
+            throw new RuntimeException(String.format("The util receive one (source file) or two (source and destination file) arguments. Provided %d arguments", args.length));
         }
         fout = new FileOutputStream(outPath);
         log.info("Reverting changes");
         revertUtil.revertChanges(fis, revertedChangesOs);
         ByteArrayInputStream withHeaderIs;
-        try (ByteArrayInputStream revertedChangesIs = new ByteArrayInputStream(revertedChangesOs.toByteArray())) {
+        try (ByteArrayInputStream revertedChangesIs = new ByteArrayInputStream(revertedChangesOs.toByteArray());) {
             try (ByteArrayOutputStream withHeaderOs = new ByteArrayOutputStream()) {
                 log.info("Return bmp header");
                 revertUtil.returnHeader(revertedChangesIs, withHeaderOs);
