@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LawyerService} from "../../services/lawyer.service";
 import {Lawyer} from "../lawyers/lawyers.component";
 import {CollegiumService} from "../../services/collegium.service";
-import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {FormControl, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 import {map} from 'rxjs/operators/map';
@@ -63,7 +63,6 @@ export class LawyerComponent implements OnInit {
       this.currentLawyer = lawyerResp;
       this.lawyerId = lawyerResp.id;
       this.getCollegiumMap(lawyerResp.collegiumId);
-      // this.currentCollegiumId.setValue(lawyerResp.collegiumId);
     })
   }
 
