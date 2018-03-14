@@ -4,6 +4,11 @@ import {CollegiumService} from "../../services/collegium.service";
 import {Moment} from "moment";
 import {MatDatepickerInputEvent} from "@angular/material";
 import {AuthorService} from "../../services/author.service";
+import {Collegium} from "../collegiums/collegiums.component";
+import {Observable} from "rxjs/Observable";
+import {map} from "rxjs/operators/map";
+import {FormControl, Validators} from "@angular/forms";
+import {MyErrorStateMatcher} from "../lawyer/lawyer.component";
 
 @Component({
   selector: 'app-reports',
@@ -14,26 +19,51 @@ export class ReportsComponent implements OnInit {
 
   collegiumsMap = {};
   authorsMap = {};
-  currentCollegiumId = 0;
+  options = [];
   currentAuthorId = 1;
   currentReportDecreeDate: Moment;
+  filteredOptions: Observable<Collegium[]>;
+  currentCollegiumId = new FormControl(0, [
+    Validators.min(1)
+  ]);
+  matcher = new MyErrorStateMatcher();
+
   constructor(private reportService: ReportService,
               private collegiumService: CollegiumService,
               private authorService: AuthorService) { }
 
   ngOnInit() {
     this.getCollegiumMap();
-    this.currentAuthorId = 1;
+    // this.currentCollegiumId.setValue(1);
   }
 
-  getCollegiumMap() {
+  displayFn(collegiumId?: number): String | undefined {
+    let collegium = this.collegiumsMap == undefined ? undefined : this.collegiumsMap[collegiumId];
+    return collegium ? collegium.name : undefined;
+  }
+
+  filter(name: string): Collegium[] {
+    return this.options.filter(option =>
+      option.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
+  getCollegiumMap(current?: Number) {
     this.collegiumService.getCollegiums().subscribe(collegiumsResp => {
       let collegiumsMap = {};
       collegiumsResp.forEach(function (collegium) {
         collegiumsMap[collegium.id] = collegium;
       });
       this.collegiumsMap = collegiumsMap;
-      this.getauthorsMap();
+      this.getAuthorsMap();
+      this.options = collegiumsResp;
+      this.filteredOptions = this.currentCollegiumId.valueChanges
+        .pipe(
+          map(value => typeof value === 'string' ? value : value.name),
+          map(name => name ? this.filter(name) : this.options.slice())
+        );
+      if (current) {
+        this.currentCollegiumId.setValue(current);
+      }
     })
   }
 
@@ -41,7 +71,7 @@ export class ReportsComponent implements OnInit {
     return Object.keys(this.collegiumsMap).map(Number);
   }
 
-  getauthorsMap() {
+  getAuthorsMap() {
     this.authorService.getAuthors().subscribe(authorsResp => {
       let authorsMap = {};
       authorsResp.forEach(function (author) {
@@ -63,23 +93,37 @@ export class ReportsComponent implements OnInit {
 
   }
 
+  checkCollegium() : Boolean {
+    return this.getCollegiumsMapKeys().indexOf(this.currentCollegiumId.value) !== -1
+      && this.currentReportDecreeDate !== undefined
+      && this.currentReportDecreeDate !== null;
+  }
+
+  isNullOrEmpty(value : String) : Boolean {
+    return (!value || value == undefined || value == "" || value.length == 0);
+  }
+
   onChangeReportDateDate(event: MatDatepickerInputEvent<Moment>) {
     this.currentReportDecreeDate = event.value;
   }
 
   open() {
-    this.reportService.getDecreeReport(this.currentCollegiumId,
-                                       false,
-                                       this.currentReportDecreeDate.format("DD/MM/YYYY"),
-                                       this.currentAuthorId);
+    if (this.checkCollegium()) {
+      this.reportService.getDecreeReport(this.currentCollegiumId.value,
+        false,
+        this.currentReportDecreeDate.format("DD/MM/YYYY"),
+        this.currentAuthorId);
+    }
   }
 
 
   save() {
-    this.reportService.getDecreeReport(this.currentCollegiumId,
-                                       true,
-                                       this.currentReportDecreeDate.format("DD/MM/YYYY"),
-                                       this.currentAuthorId);
+    if (this.checkCollegium()) {
+      this.reportService.getDecreeReport(this.currentCollegiumId.value,
+        true,
+        this.currentReportDecreeDate.format("DD/MM/YYYY"),
+        this.currentAuthorId);
+    }
   }
 
 }

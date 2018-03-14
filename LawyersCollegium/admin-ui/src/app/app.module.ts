@@ -23,6 +23,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import {DecreeService} from "./services/decree.service";
 import {DecreeComponent} from './components/decree/decree.component';
@@ -83,7 +84,8 @@ const appRoutes: Routes = [
     MatIconModule,
     MatCardModule,
     MatToolbarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [DecreeService,
     LawyerService,

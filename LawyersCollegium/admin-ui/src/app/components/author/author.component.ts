@@ -36,15 +36,25 @@ export class AuthorComponent implements OnInit {
     })
   }
 
+  checkPreConditions() : Boolean {
+    return !this.isNullOrEmpty(this.currentAuthor.name);
+  }
+
+  isNullOrEmpty(value : String) : Boolean {
+    return (!value || value == undefined || value == "" || value.length == 0);
+  }
+
   saveChanges() {
-    if (this.currentAuthorId == 0) {
-      this.authorService.createAuthor(this.currentAuthor).subscribe(resp => {
-        this.router.navigate(['/authors']);
-      })
-    } else {
-      this.authorService.updateAuthor(this.currentAuthorId, this.currentAuthor).subscribe(resp => {
-        this.router.navigate(['/authors']);
-      })
+    if (this.checkPreConditions()) {
+      if (this.currentAuthorId == 0) {
+        this.authorService.createAuthor(this.currentAuthor).subscribe(resp => {
+          this.router.navigate(['/authors']);
+        })
+      } else {
+        this.authorService.updateAuthor(this.currentAuthorId, this.currentAuthor).subscribe(resp => {
+          this.router.navigate(['/authors']);
+        })
+      }
     }
   }
 

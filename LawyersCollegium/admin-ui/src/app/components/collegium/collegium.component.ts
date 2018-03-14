@@ -35,15 +35,25 @@ export class CollegiumComponent implements OnInit {
     })
   }
 
+  checkPreConditions() : Boolean {
+    return !this.isNullOrEmpty(this.currentCollegium.name);
+  }
+
+  isNullOrEmpty(value : String) : Boolean {
+    return (!value || value == undefined || value == "" || value.length == 0);
+  }
+
   saveChanges() {
-    if (this.currentCollegiumId == 0) {
-      this.collegiumService.createCollegium(this.currentCollegium).subscribe(resp => {
-        this.router.navigate(['/collegiums']);
-      })
-    } else {
-      this.collegiumService.updateCollegium(this.currentCollegiumId, this.currentCollegium).subscribe(resp => {
-        this.router.navigate(['/collegiums']);
-      })
+    if (this.checkPreConditions()) {
+      if (this.currentCollegiumId == 0) {
+        this.collegiumService.createCollegium(this.currentCollegium).subscribe(resp => {
+          this.router.navigate(['/collegiums']);
+        })
+      } else {
+        this.collegiumService.updateCollegium(this.currentCollegiumId, this.currentCollegium).subscribe(resp => {
+          this.router.navigate(['/collegiums']);
+        })
+      }
     }
   }
 

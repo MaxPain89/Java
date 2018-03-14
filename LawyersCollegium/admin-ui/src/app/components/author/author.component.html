@@ -8,13 +8,13 @@
     <div>
       <mat-form-field class="author-card-field">
         <div>
-          <input matInput placeholder="Доп. инфо"  [(ngModel)]="currentAuthor.phone">
+          <input matInput placeholder="Телефон"  [(ngModel)]="currentAuthor.phone">
         </div>
       </mat-form-field>
     </div>
   </div>
   <mat-card-actions class="author-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="saveChanges()">
+    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="!checkPreConditions()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button color="primary" (click)="cancel()">

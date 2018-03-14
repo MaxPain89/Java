@@ -15,15 +15,28 @@
         <mat-datepicker #date></mat-datepicker>
       </mat-form-field>
     </div>
+    <!--<div>-->
+      <!--<mat-form-field class="report-decree-card-field">-->
+        <!--<mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">-->
+          <!--<mat-option value=0>&#45;&#45;</mat-option>-->
+          <!--<mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">-->
+            <!--{{collegiumsMap[key].name}}-->
+          <!--</mat-option>-->
+        <!--</mat-select>-->
+      <!--</mat-form-field>-->
+    <!--</div>-->
     <div>
-      <mat-form-field class="report-decree-card-field">
-        <mat-select placeholder="Выберете коллегию" [(value)]="currentCollegiumId" (change)="onChangeCollegium($event)">
-          <mat-option value=0>--</mat-option>
-          <mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">
-            {{collegiumsMap[key].name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <form>
+        <mat-form-field class="report-decree-card-field">
+          <input type="text" placeholder="Выберете коллегию" aria-label="Коллегия" matInput [formControl]="currentCollegiumId" [matAutocomplete]="auto" [errorStateMatcher]="matcher">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error>Необходимо выбрать коллегию</mat-error>
+        </mat-form-field>
+      </form>
     </div>
     <div>
       <mat-form-field class="report-decree-card-field">
@@ -37,10 +50,10 @@
     </div>
   </div>
   <mat-card-actions class="report-decree-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="open()">
+    <button mat-icon-button color="primary" (click)="open()" [disabled]="!checkCollegium()">
       <mat-icon>search</mat-icon>
     </button>
-    <button mat-icon-button color="primary" (click)="save()">
+    <button mat-icon-button color="primary" (click)="save()" [disabled]="!checkCollegium()">
       <mat-icon>save</mat-icon>
     </button>
   </mat-card-actions>
