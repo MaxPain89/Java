@@ -89,7 +89,7 @@ export class LawyerComponent implements OnInit {
     return Object.keys(this.collegiumsMap).map(Number);
   }
 
-  checkCollegium() : Boolean {
+  checkPreConditions() : Boolean {
     return this.getCollegiumsMapKeys().indexOf(this.currentCollegiumId.value) !== -1 && !this.isNullOrEmpty(this.currentLawyer.fullName);
   }
 
@@ -98,7 +98,7 @@ export class LawyerComponent implements OnInit {
   }
 
   saveChanges() {
-    if (this.checkCollegium()) {
+    if (this.checkPreConditions()) {
       if (this.lawyerId == 0) {
         this.lawyerService.createLawyer(this.currentLawyer, this.currentCollegiumId.value == 0 ? null : this.currentCollegiumId.value).subscribe(resp => {
           this.router.navigate(['/lawyers']);

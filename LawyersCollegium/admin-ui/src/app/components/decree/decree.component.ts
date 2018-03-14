@@ -91,8 +91,12 @@ export class DecreeComponent implements OnInit {
     return Object.keys(this.lawyersMap).map(Number);
   }
 
-  checkLawyer() : Boolean {
-    return this.getLawyersMapKeys().indexOf(this.currentLawyerId.value) !== -1;
+  checkPreConditions() : Boolean {
+    return this.getLawyersMapKeys().indexOf(this.currentLawyerId.value) !== -1
+      && !this.isNullOrEmpty(this.currentDecree.accused)
+      && this.currentDecree.amount >= 0
+      && this.currentDecree.date !== undefined
+      && this.currentDecree.date !== null;
   }
 
   isNullOrEmpty(value : String) : Boolean {
@@ -101,7 +105,7 @@ export class DecreeComponent implements OnInit {
 
 
   saveChanges() {
-    if (this.checkLawyer()) {
+    if (this.checkPreConditions()) {
       if (this.decreeId == 0) {
         this.decreeService.createDecree(this.currentDecree, this.currentLawyerId.value == 0 ? null : this.currentLawyerId.value).subscribe(resp => {
           this.router.navigate(['/decrees']);

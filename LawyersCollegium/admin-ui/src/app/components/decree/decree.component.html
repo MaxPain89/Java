@@ -41,7 +41,7 @@
     </div>
   </div>
   <mat-card-actions class="decree-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="currentLawyerId.hasError('min') || !checkLawyer()">
+    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="currentLawyerId.hasError('min') || !checkPreConditions()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button color="primary" (click)="cancel()">

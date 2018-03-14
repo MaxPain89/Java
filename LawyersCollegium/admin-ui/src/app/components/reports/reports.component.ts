@@ -8,6 +8,7 @@ import {Collegium} from "../collegiums/collegiums.component";
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators/map";
 import {FormControl, Validators} from "@angular/forms";
+import {MyErrorStateMatcher} from "../lawyer/lawyer.component";
 
 @Component({
   selector: 'app-reports',
@@ -25,6 +26,8 @@ export class ReportsComponent implements OnInit {
   currentCollegiumId = new FormControl(0, [
     Validators.min(1)
   ]);
+  matcher = new MyErrorStateMatcher();
+
   constructor(private reportService: ReportService,
               private collegiumService: CollegiumService,
               private authorService: AuthorService) { }
@@ -91,7 +94,9 @@ export class ReportsComponent implements OnInit {
   }
 
   checkCollegium() : Boolean {
-    return this.getCollegiumsMapKeys().indexOf(this.currentCollegiumId.value) !== -1;
+    return this.getCollegiumsMapKeys().indexOf(this.currentCollegiumId.value) !== -1
+      && this.currentReportDecreeDate !== undefined
+      && this.currentReportDecreeDate !== null;
   }
 
   isNullOrEmpty(value : String) : Boolean {

@@ -14,7 +14,7 @@
     </div>
   </div>
   <mat-card-actions class="collegium-card-actions" align="end">
-    <button mat-icon-button color="primary" (click)="saveChanges()">
+    <button mat-icon-button color="primary" (click)="saveChanges()" [disabled]="!checkPreConditions()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button color="primary" (click)="cancel()">
