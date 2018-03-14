@@ -16,7 +16,7 @@ import {Collegium} from "../collegiums/collegiums.component";
 })
 export class LawyerComponent implements OnInit {
 
-  collegiumsMaps = {};
+  collegiumsMap = {};
   options = [];
   currentLawyer: Lawyer = <Lawyer>{};
   currentCollegiumId = new FormControl(0, [
@@ -49,7 +49,7 @@ export class LawyerComponent implements OnInit {
   }
 
   displayFn(collegiumId?: number): String | undefined {
-    let collegium = this.collegiumsMaps == undefined ? undefined : this.collegiumsMaps[collegiumId];
+    let collegium = this.collegiumsMap == undefined ? undefined : this.collegiumsMap[collegiumId];
     return collegium ? collegium.name : undefined;
   }
 
@@ -72,7 +72,7 @@ export class LawyerComponent implements OnInit {
       collegiumsResp.forEach(function (collegium) {
         collegiumsMap[collegium.id] = collegium;
       });
-      this.collegiumsMaps = collegiumsMap;
+      this.collegiumsMap = collegiumsMap;
       this.options = collegiumsResp;
       this.filteredOptions = this.currentCollegiumId.valueChanges
         .pipe(
@@ -86,7 +86,7 @@ export class LawyerComponent implements OnInit {
   }
 
   getCollegiumsMapKeys() : Array<number> {
-    return Object.keys(this.collegiumsMaps).map(Number);
+    return Object.keys(this.collegiumsMap).map(Number);
   }
 
   checkCollegium() : Boolean {
