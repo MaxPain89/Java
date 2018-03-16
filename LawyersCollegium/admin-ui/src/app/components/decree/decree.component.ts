@@ -40,6 +40,7 @@ export class DecreeComponent implements OnInit {
       } else {
         this.getLawyersMap();
         this.currentDecree.lawyerId = 0;
+        this.currentDecreePayDate = moment();
       }
     });
   }
