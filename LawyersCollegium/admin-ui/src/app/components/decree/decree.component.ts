@@ -11,6 +11,7 @@ import {Collegium} from "../collegiums/collegiums.component";
 import {Observable} from "rxjs/Observable";
 import {Lawyer} from "../lawyers/lawyers.component";
 import {map} from "rxjs/operators/map";
+import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-decree',
@@ -32,7 +33,8 @@ export class DecreeComponent implements OnInit {
   constructor(private decreeService: DecreeService,
               private lawyerService: LawyerService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private appComponent: AppComponent) {
     this.route.params.subscribe(params => {
       this.decreeId = params['id'];
       if (this.decreeId != 0) {
@@ -71,7 +73,7 @@ export class DecreeComponent implements OnInit {
   }
 
   getLawyersMap(current?: Number) {
-    this.lawyerService.getLawyers(null).subscribe(lawyersResp => {
+    this.lawyerService.getLawyers(this.appComponent.currentCollegiumId).subscribe(lawyersResp => {
       let lawyersMap = {};
       lawyersResp.forEach(function (lawyer) {
         lawyersMap[lawyer.id] = lawyer;

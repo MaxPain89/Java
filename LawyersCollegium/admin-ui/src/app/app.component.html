@@ -3,6 +3,14 @@
     <span>Адвокаты</span>
   </mat-toolbar-row>
 </mat-toolbar>
+<mat-form-field class="collegiumFilter">
+  <mat-select placeholder="Текущая коллегия" [(value)]="currentCollegiumId" (change)="changeCollegium()">
+    <mat-option value=0>Все</mat-option>
+    <mat-option *ngFor="let key of getCollegiumsMapKeys()" [value]="key">
+      {{collegiumsMap[key].name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 <nav mat-tab-nav-bar>
   <a mat-tab-link
      *ngFor="let link of routeLinks"
