@@ -25,9 +25,9 @@ public class DecreeResource {
         if (startDate != null || endDate != null) {
             Date start = getDate(startDate);
             Date end = getDate(endDate);
-            return decreeController.getDecreesByDate(start, end, false);
+            return decreeController.getDecreesByDate(start, end, true);
         } else if (year != null) {
-            return decreeController.getDecreesForYear(year, false);
+            return decreeController.getDecreesForYear(year, true);
         } else {
             return decreeController.getAllDecrees();
         }
