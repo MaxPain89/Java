@@ -5,6 +5,8 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.mkalita.jpa.Collegium;
+import com.mkalita.jpa.Decree;
+import com.mkalita.jpa.Lawyer;
 import com.mkalita.utils.PdfGenerator;
 import com.mkalita.wire.WireAuthor;
 import com.mkalita.wire.WireDecree;
@@ -61,6 +63,12 @@ public class ReportController {
                 .addTable(generateStringForAuthorAndPhone(author.getName(), author.getPhone()))
                 .build();
         return addRequestHeaders(download, documentBody);
+    }
+
+    public HttpEntity<byte[]> getDecreesReportByDecree(Long decreeId, Boolean download, int reporterId) throws DocumentException, IOException {
+        Decree decree = decreeController._getDecree(decreeId);
+        Long collegiumId = decree.getLawyer().getCollegium().getId();
+        return getDecreesReport(collegiumId, decree.getPayDate(), download, reporterId);
     }
 
     private Paragraph generateParagraph(String value, int alignment, int size) {

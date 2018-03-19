@@ -5,6 +5,7 @@ import {DateAdapter} from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Moment} from "moment";
 import {Router} from "@angular/router";
+import {ReportService} from "../../services/report.service";
 
 @Component({
   selector: 'app-decrees',
@@ -30,7 +31,8 @@ export class DecreesComponent implements OnInit {
 
   constructor(private decreeService: DecreeService,
               private adapter: DateAdapter<any>,
-              private router: Router) {
+              private router: Router,
+              private reportService: ReportService) {
   }
 
   ngOnInit() {
@@ -104,6 +106,10 @@ export class DecreesComponent implements OnInit {
 
   addButton() {
     this.router.navigate(['/decree/' + 0]);
+  }
+
+  showReport(decreeId: number) {
+    this.reportService.getDecreeReportByDecree(decreeId, false, 1)
   }
 }
 
