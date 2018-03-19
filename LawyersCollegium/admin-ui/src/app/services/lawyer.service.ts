@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Lawyer} from "../components/lawyers/lawyers.component";
 import {environment} from "../../environments/environment";
+import {AppComponent} from "../app.component";
 
 @Injectable()
 export class LawyerService {
@@ -24,7 +25,7 @@ export class LawyerService {
 
   getLawyers(collegiumId: number): Observable<any> {
     let params: string = "";
-    if (collegiumId > 0) {
+    if (collegiumId >= 0) {
       params = "?collegiumId=" + collegiumId;
     }
     return this.http.get(this.lawyersPath + params);

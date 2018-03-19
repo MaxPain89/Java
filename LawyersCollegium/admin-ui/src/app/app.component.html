@@ -3,6 +3,22 @@
     <span>Адвокаты</span>
   </mat-toolbar-row>
 </mat-toolbar>
+<div>
+  <mat-slide-toggle
+    color="primary"
+    [checked]="isCollegiumFilterSelected"
+    (change)="onCollegiumFilterSlider($event)">
+  </mat-slide-toggle>
+  <mat-form-field class="collegium-filter">
+    <input type="text" placeholder="Выберете коллегию" aria-label="Коллегия" matInput [formControl]="currentCollegiumId"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id" (onSelectionChange)="changeCollegium()">
+        {{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
 <nav mat-tab-nav-bar>
   <a mat-tab-link
      *ngFor="let link of routeLinks"

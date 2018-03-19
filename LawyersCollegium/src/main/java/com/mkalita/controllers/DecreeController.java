@@ -91,7 +91,7 @@ public class DecreeController {
         return _getDecree(decreeId).toWire();
     }
 
-    private Decree _getDecree(Long decreeId) {
+    public Decree _getDecree(Long decreeId) {
         return JPAUtil.getObject(em, "id", decreeId, Decree.class)
                 .orElseThrow(() -> new NotFoundException(String.format("Couldn't find decree with id %s", decreeId)));
     }

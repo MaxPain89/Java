@@ -71,6 +71,9 @@
         <button mat-icon-button color="primary" (click)="deleteButton(element.id)">
           <mat-icon>delete</mat-icon>
         </button>
+        <button mat-icon-button color="primary" (click)="showReport(element.id)">
+          <mat-icon>description</mat-icon>
+        </button>
         </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
