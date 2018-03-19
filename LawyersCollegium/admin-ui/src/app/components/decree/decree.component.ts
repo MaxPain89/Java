@@ -41,6 +41,7 @@ export class DecreeComponent implements OnInit {
         this.getLawyersMap();
         this.currentDecree.lawyerId = 0;
         this.currentDecreePayDate = moment();
+        this.currentDecree.payDate = this.currentDecreePayDate.format("DD/MM/YYYY");
       }
     });
   }
