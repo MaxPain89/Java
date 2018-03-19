@@ -33,13 +33,17 @@
 <button mat-raised-button (click)="applyPeriod()" [disabled]="!startPeriod || !endPeriod || isYearSelected">Показать</button>
 <div class="example-header">
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Адвокат">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Поиск">
   </mat-form-field>
 </div>
 <div class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> № пост.</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
+    </ng-container>
     <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Дата постановления</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Дата пост.</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.date}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="accused">

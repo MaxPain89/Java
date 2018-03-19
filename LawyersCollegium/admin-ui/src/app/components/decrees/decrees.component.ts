@@ -36,7 +36,7 @@ export class DecreesComponent implements OnInit {
   ngOnInit() {
     this.year = this.currentYear;
     this.getDecrees();
-    this.displayedColumns = ['date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
+    this.displayedColumns = ['id', 'date', 'accused', 'lawyer', 'amount', 'payDate', 'buttons'];
   }
 
   applyFilter(filterValue: string) {
