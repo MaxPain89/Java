@@ -73,7 +73,11 @@ export class DecreeComponent implements OnInit {
   }
 
   getLawyersMap(current?: Number) {
-    this.lawyerService.getLawyers(this.appComponent.currentCollegiumId).subscribe(lawyersResp => {
+    let collegiumId : number = -1;
+    if (this.appComponent.isCollegiumFilterSelected) {
+      collegiumId = this.appComponent.currentCollegiumId.value;
+    }
+    this.lawyerService.getLawyers(collegiumId).subscribe(lawyersResp => {
       let lawyersMap = {};
       lawyersResp.forEach(function (lawyer) {
         lawyersMap[lawyer.id] = lawyer;
