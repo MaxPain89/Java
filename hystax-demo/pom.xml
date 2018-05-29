@@ -12,11 +12,19 @@
 		<spring.version>4.0.9.RELEASE</spring.version>
 		<dep.hibernate.jpa.version>1.0.0.Final</dep.hibernate.jpa.version>
 		<dep.hibernate.core.version>5.1.11.Final</dep.hibernate.core.version>
+		<dep.spymemcached.version>2.12.3</dep.spymemcached.version>
 		<jackson.version>2.4.4</jackson.version>
 		<servletapi.version>3.0.1</servletapi.version>
 	</properties>
 	
 	<dependencies>
+
+		<!-- Memcached -->
+		<dependency>
+			<groupId>net.spy</groupId>
+			<artifactId>spymemcached</artifactId>
+			<version>${dep.spymemcached.version}</version>
+		</dependency>
 
 		<!-- Spring MVC framework -->
 		<dependency>

@@ -23,7 +23,8 @@ public class Phonebook {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_generator")
+    @SequenceGenerator(name="book_generator", sequenceName = "PHONEBOOK_SEQ", allocationSize=1)
     @Column(name = "ID", nullable = false, precision = 0)
     public long getId() {
         return id;

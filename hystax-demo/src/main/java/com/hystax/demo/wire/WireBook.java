@@ -3,7 +3,9 @@ package com.hystax.demo.wire;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WireBook {
+import java.io.Serializable;
+
+public class WireBook implements Serializable {
     private Long id;
     private String fullName;
     private String address;
