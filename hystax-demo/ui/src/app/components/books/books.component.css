@@ -10,7 +10,10 @@
 .inline-flex {
   display:inline-flex;
   width: 100%;
+}
 
+.button-row {
+    margin-bottom: 20px;
 }
 
 .add-button {

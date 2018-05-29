@@ -12,5 +12,9 @@ export class AppComponent {
   title = 'Books';
 
   constructor() {
+    this.routeLinks = [
+        {label: 'Home', path: 'websphere'},
+        {label: 'Calculate', path: 'calculate'}
+    ];
   }
 }

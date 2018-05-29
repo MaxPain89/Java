@@ -7,6 +7,10 @@ import {Book} from "../components/books/books.component";
 export class BookService {
 
   booksPath: string = "rest/books";
+  calculatePath: string = "rest/book/calculate";
+  // calculatePath: string = "http://172.22.5.204:9080/hystax/rest/book/calculate";
+  invalidatePath: string = "rest/book/invalidate";
+  // invalidatePath: string = "http://172.22.5.204:9080/hystax/rest/book/invalidate";
   bookPath: string = "rest/book/";
 
   headers = new HttpHeaders({
@@ -21,6 +25,14 @@ export class BookService {
 
   getBooks():Observable<any> {
     return this.http.get(this.booksPath);
+  }
+
+  calculateBooks():Observable<any> {
+      return this.http.get(this.calculatePath);
+  }
+
+  invalidateCache():Observable<any> {
+      return this.http.post(this.invalidatePath, "");
   }
 
   // noinspection JSUnusedGlobalSymbols

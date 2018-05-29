@@ -25,19 +25,23 @@ public class PhoneBookController {
     private final EntityManagerFactory emf;
     private EntityManager em;
     private MemcachedClient memClient = null;
-    private Context initial_ctx;
     private static final String MEMCACHED_KEY = "HystaxDemoBookKey";
     private static final String PERSISTENT_UNIT_NAME = "OracleJPA";
-    private static final String SQL_REQUEST = "select pb.tid as ID, pb.FULL_NAME, pb.ADDRESS, pb.PHONE, pb.ID_NUMBER from (select ID as tid, FULL_NAME, ADDRESS, PHONE, ID_NUMBER, (select count(*)       from phonebook pb2 where substr(pb2.phone, 4, 5) LIKE substr(phonebook.phone, 4, 5) group by substr(pb2.phone, 4, 5)) as cnt, substr(phonebook.phone, 4, 5) as code from phonebook order by cnt desc, code) pb";
+//    private static final String SQL_REQUEST = "select pb.tid as ID, pb.FULL_NAME, pb.ADDRESS, pb.PHONE, pb.ID_NUMBER from (select ID as tid, FULL_NAME, ADDRESS, PHONE, ID_NUMBER, (select count(*) from phonebook pb2 where substr(pb2.phone, 4, 5) LIKE substr(phonebook.phone, 4, 5) group by substr(pb2.phone, 4, 5)) as cnt, substr(phonebook.phone, 4, 5) as code from phonebook order by cnt desc, code) pb";
+    private static final String SQL_REQUEST = "select pb.tid as ID, pb.FULL_NAME, pb.ADDRESS, pb.PHONE, pb.ID_NUMBER from (select ID as tid, FULL_NAME, ADDRESS, PHONE, ID_NUMBER, (select count(*) from phonebook pb2 where pb2.phone = phonebook.phone group by substr(pb2.phone, 4, 5)) as cnt, substr(phonebook.phone, 4, 5) as code from phonebook order by cnt desc, code ) pb";
 
     public PhoneBookController() {
         emf = Persistence.createEntityManagerFactory(PERSISTENT_UNIT_NAME);
         em = emf.createEntityManager();
         try {
-            initial_ctx = new InitialContext();
+            Context initial_ctx = new InitialContext();
             String jndiMemcached = (String) initial_ctx.lookup("memcachedServers");
             List<InetSocketAddress> servers = getServers(jndiMemcached);
-            memClient = new MemcachedClient(servers);
+            if (servers.size() >0) {
+                memClient = new MemcachedClient(servers);
+            } else {
+                memClient = null;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (NamingException e) {
@@ -64,8 +68,7 @@ public class PhoneBookController {
     }
 
     private Phonebook _getBook(Long id) {
-        Phonebook book = JPAUtil.getObject(em, "id", id, Phonebook.class);
-        return book;
+        return JPAUtil.getObject(em, "id", id, Phonebook.class);
     }
 
     public WireBook addBook(WireBook wireBook) {
@@ -74,6 +77,7 @@ public class PhoneBookController {
             Phonebook book = new Phonebook(wireBook);
             em.persist(book);
             em.getTransaction().commit();
+            invalidateCache();
             return book.toWire();
         } finally {
             if (em.getTransaction().isActive()) {
@@ -103,6 +107,7 @@ public class PhoneBookController {
             Phonebook book = _getBook(id);
             em.remove(book);
             em.getTransaction().commit();
+            invalidateCache();
             return book.toWire();
         } finally {
             if (em.getTransaction().isActive()) {
@@ -112,7 +117,7 @@ public class PhoneBookController {
     }
 
     public CalculateResponse calculate() {
-        boolean isCached = false;
+        boolean isCached;
         long startTime = System.currentTimeMillis();
         List<WireBook> result = checkMemcached();
         if (result != null) {
@@ -126,24 +131,50 @@ public class PhoneBookController {
         return new CalculateResponse(result, isCached, endTime - startTime, SQL_REQUEST);
     }
 
+    @SuppressWarnings("unchecked")
     private List<WireBook> checkMemcached() {
-        Object obj = memClient.get(MEMCACHED_KEY);
-        if (obj != null) {
-            return (List<WireBook>) obj;
-        } else {
+        if (memClient == null) {
+            return null;
+        }
+        try {
+            Object obj = memClient.get(MEMCACHED_KEY);
+            if (obj != null) {
+                if (obj instanceof ArrayList) {
+                    return (List<WireBook>) obj;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
             return null;
         }
     }
 
     private void putToMem(List<WireBook> books) {
-        memClient.set(MEMCACHED_KEY, 3600, books);
+        if (memClient == null) {
+            return;
+        }
+        try {
+            int TTL_FOR_MEMCACHE_MINS = 20;
+            memClient.set(MEMCACHED_KEY, TTL_FOR_MEMCACHE_MINS * 60, books);
+        } catch (Exception ignored) {
+        }
     }
 
     public String invalidateCache() {
-        memClient.delete(MEMCACHED_KEY);
-        return "Ok";
+        if (memClient == null) {
+            return "Failed";
+        }
+        try {
+            memClient.delete(MEMCACHED_KEY);
+            return "Ok";
+        } catch (Exception e) {
+            return "Failed";
+        }
     }
-
+    @SuppressWarnings("unchecked")
     private List<WireBook> getFromBase() {
         List<Phonebook> result = em.createNativeQuery(SQL_REQUEST, Phonebook.class).getResultList();
         List<WireBook> wireResult = new ArrayList<WireBook>();
@@ -156,9 +187,9 @@ public class PhoneBookController {
     static private List<InetSocketAddress> getServers(String str) {
         List<InetSocketAddress> servers = new ArrayList<InetSocketAddress>();
         String[] arr = str.split(";");
-        for (int i = 0; i < arr.length; i++) {
-            String host = arr[i].split(":")[0];
-            Integer port = Integer.valueOf(arr[i].split(":")[1]);
+        for (String anArr : arr) {
+            String host = anArr.split(":")[0];
+            Integer port = Integer.valueOf(anArr.split(":")[1]);
             servers.add(new InetSocketAddress(host, port));
         }
         return servers;

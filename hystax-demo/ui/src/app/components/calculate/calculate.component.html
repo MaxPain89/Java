@@ -1,0 +1,56 @@
+<div class="example-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+  </mat-form-field>
+</div>
+<div class="button-row">
+  <button mat-raised-button color="primary" (click)="invalidateCache()">
+    Invalidate memcache
+  </button>
+</div>
+<div>
+  <label>Status: {{status}}</label>
+</div>
+<div>
+  <label>Memcache used: {{memcache}}</label>
+</div>
+<div>
+  <label>Used sql: {{sqlRequest}}</label>
+</div>
+<div>
+  <label>Duration: {{duration}} ms</label>
+</div>
+<div>
+  <label>Result:</label>
+</div>
+<div class="mat-elevation-z8">
+  <mat-spinner *ngIf="!completed" class="spinner"></mat-spinner>
+  <div [hidden]="!completed">
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <mat-header-cell *matHeaderCellDef> Full name</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.fullName}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef> Address</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.address}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef> Phone</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.phone}}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  </div>
+  <div class="inline-flex">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+</div>

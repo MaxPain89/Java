@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {BooksComponent} from './components/books/books.component';
 
+import {MatProgressSpinnerModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule} from '@angular/material';
 import {MatSortModule} from '@angular/material/sort';
@@ -22,20 +23,23 @@ import {MatToolbarModule} from "@angular/material";
 
 import {BookService} from "./services/book.service";
 import {BookComponent} from './components/book/book.component';
+import { CalculateComponent } from './components/calculate/calculate.component';
 
 const appRoutes: Routes = [
   {path: "",
       redirectTo: "/websphere",
       pathMatch: 'full'},
   {path: "websphere", component: BooksComponent},
-  {path: "book/:id", component: BookComponent}
+  {path: "book/:id", component: BookComponent},
+  {path: "calculate", component: CalculateComponent}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     BooksComponent,
-    BookComponent
+    BookComponent,
+    CalculateComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,8 @@ const appRoutes: Routes = [
     FormsModule,
     MatIconModule,
     MatCardModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatProgressSpinnerModule
   ],
   providers: [BookService],
   bootstrap: [AppComponent]
