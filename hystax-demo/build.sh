@@ -7,7 +7,7 @@ BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ~/.nvm/nvm.sh
 
-nvm use 7.5.0
+nvm use 8.9
 
 cd ${BASEDIR}/ui;
 ng build --delete-output-path --base-href=/hystax/ --output-path ${BASEDIR}/src/main/webapp/static;
